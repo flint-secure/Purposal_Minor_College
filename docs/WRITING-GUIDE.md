@@ -27,7 +27,7 @@ The LaTeX source (`sections/body.tex`, `proposal.tex`) already follows this rule
 | Requirement | Proposal (`proposal.pdf`) | Notes |
 |-------------|---------------------------|--------|
 | A4, portrait, single-sided | Yes | `oneside` in class |
-| Margins 1″ + 0.5″ left binding | Yes | `geometry`: 1″ sides + `bindingoffset=0.5in` |
+| Margins 1″ + 0.5″ left binding | Yes | `left=1in` + `bindingoffset=0.5in` → **1.5″** total on the left; 1″ on right, top, bottom |
 | 1.5 line spacing | Yes | `\onehalfspacing` |
 | 6 pt paragraph spacing | Yes | `parskip` package |
 | Footer `[n/total]`, header = project title | Yes | `fancyhdr` + `lastpage` |

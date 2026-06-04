@@ -66,7 +66,8 @@
 \fi
 
 % ---------------------------------------------------------------------------
-% Page layout — A4, 1" margins + 0.5" binding (gutter) on the left
+% Page layout — A4, 1" margins on all sides + 0.5" binding offset on the left
+% (Guidelines 2019: total left from paper edge to text = 1" + 0.5" = 1.5")
 % ---------------------------------------------------------------------------
 \RequirePackage{geometry}
 \geometry{
@@ -287,37 +288,45 @@
 
 \newcommand{\maketitlepage}{%
   \ncit@setstage
+  \if@ncitproposal
+    \def\ncit@titleafterdegree{0.13\textheight}%
+    \def\ncit@titlebeforedate{1.6em}%
+  \else
+    \def\ncit@titleafterdegree{0.21\textheight}%
+    \def\ncit@titlebeforedate{2.4em}%
+  \fi
   \begin{titlepage}
     \thispagestyle{empty}
     \centering
-    \vspace*{2.2cm}
     {\fontsize{14}{18}\selectfont
-      A \ncit@projectkind\ Project \ncit@reportstage\ Report on\\[0.85em]
+      A \ncit@projectkind\ Project \ncit@reportstage\ Report on\\[0.75em]
       {\fontsize{16}{22}\bfseries\selectfont \ncit@title\par}
-      \vspace{1.4em}
-      Submitted in Partial Fulfillment of the Requirements for\\[0.45em]
-      the Degree of \textbf{\ncit@degree}\\[0.4em]
+      \vspace{1.1em}
+      Submitted in Partial Fulfillment of the Requirements for\\[0.4em]
+      the Degree of \textbf{\ncit@degree}\\[0.35em]
       under Pokhara University\par
-      \vspace{0.21\textheight}
+      \vspace{\ncit@titleafterdegree}
       Submitted by:\par
-      \vspace{0.65em}
+      \vspace{0.5em}
       {\bfseries
       \begin{tabular}{@{}c@{}}
         \ncit@students
       \end{tabular}\par}
-      \vspace{2.4em}
-      Under the supervision of\par
-      \vspace{0.55em}
-      \textbf{\ncit@supervisor}\par
-      \ifstrempty{\ncit@supervisordesignation}{}{\ncit@supervisordesignation\par}
-      \vspace{2.4em}
+      \vspace{\ncit@titlebeforedate}
+      \if@ncitproposal\else
+        Under the supervision of\par
+        \vspace{0.5em}
+        \textbf{\ncit@supervisor}\par
+        \ifstrempty{\ncit@supervisordesignation}{}{\ncit@supervisordesignation\par}
+        \vspace{2.4em}
+      \fi
       Date:\par
-      \vspace{0.45em}
+      \vspace{0.4em}
       \ncit@date\par
     }
     \vfill
     \ncit@collegefooter
-    \vspace{0.6cm}
+    \vspace{0.4cm}
   \end{titlepage}
 }
 
