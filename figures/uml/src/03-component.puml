@@ -1,0 +1,55 @@
+@startuml 03-component
+title Flint Secure — Component Diagram (Go API)
+
+package "handlers" {
+  [IdentifyHandler]
+  [ScoreHandler]
+  [AdminHandler]
+}
+
+package "core" {
+  [matching]
+  [scoring]
+  [velocity]
+  [geoip]
+}
+
+package "infrastructure" {
+  [store]
+  [middleware]
+  [messaging]
+  [quota]
+}
+
+database "Redis" as Redis
+database "PostgreSQL" as PG
+queue "NATS" as NATS
+
+[IdentifyHandler] --> [matching]
+[IdentifyHandler] --> [store]
+[ScoreHandler] --> [scoring]
+[ScoreHandler] --> [velocity]
+[ScoreHandler] --> [store]
+[ScoreHandler] --> [quota]
+[ScoreHandler] --> [messaging]
+[middleware] --> [IdentifyHandler]
+[middleware] --> [ScoreHandler]
+[store] --> Redis
+[messaging] --> NATS
+note right of [scoring]
+  Pure function —
+  no I/O inside engine
+end note
+
+package "python_workers" {
+  [device_indexer]
+  [transaction_indexer]
+  [user_profile_builder]
+  [device_trust]
+  [recipient_risk]
+}
+
+[device_indexer] --> NATS
+[device_indexer] --> PG
+
+@enduml

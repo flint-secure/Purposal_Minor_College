@@ -1,0 +1,17 @@
+%% Further works — for final report (not initial proposal)
+\section{Further Works}
+
+The following directions are identified for future development:
+\begin{itemize}
+  \item \textbf{Machine learning integration:} Replace deterministic scoring weights with
+        gradient-boosted models (XGBoost, LightGBM) trained on accumulated transaction data.
+        The current rule-based engine provides an interpretable baseline and labeled training data.
+  \item \textbf{pgvector ANN indexing} for fuzzy device matching, reducing Layer~3 identify
+        latency from $\sim$187\,ms toward under 50\,ms.
+  \item \textbf{Federated learning} across client networks (with privacy controls) so device
+        trust signals propagate across PSPs on the Flint Secure network.
+  \item \textbf{FIU-Nepal API integration} for live sanctions and watchlist feeds.
+  \item \textbf{Dashboard frontend:} Next.js UI for fraud analysts (alerts, thresholds, queues).
+  \item \textbf{Formal security audit} of HMAC signing, Redis key isolation, and phone hash
+        storage against Nepal's emerging data protection framework.
+\end{itemize}

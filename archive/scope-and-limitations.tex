@@ -1,0 +1,19 @@
+%% Scope and Limitations — for mid-term / final report (not initial proposal)
+\section{Scope and Limitations}
+
+\subsection{In Scope}
+\begin{itemize}
+  \item Go backend with \texttt{/v1/identify} and \texttt{/v1/score} endpoints.
+  \item Device fingerprinting SDKs for Android, iOS, and JavaScript.
+  \item Redis device store, velocity counters, and user profiles; NATS JetStream workers.
+  \item PostgreSQL for transactions, alerts, and client management.
+  \item 168-test automated validation suite.
+\end{itemize}
+
+\subsection{Limitations}
+\begin{itemize}
+  \item Scoring uses deterministic weighted rules; machine learning is identified as future work.
+  \item Recipient risk depends on accumulated fraud reports (weak at cold start).
+  \item GeoIP (MaxMind GeoLite2) has limited ISP precision within Nepal.
+  \item FIU-Nepal regulatory feeds are manual blocklists until an API is available.
+\end{itemize}

@@ -1,0 +1,61 @@
+@startuml 05-class-domain
+title Flint Secure — Core Domain Classes
+
+class StoredDevice {
+  +deviceID: string
+  +localFP: string
+  +signals: map
+  +trustScore: float
+  +createdAt: time
+}
+
+class ScoreRequest {
+  +senderID: string
+  +receiverID: string
+  +amount: float64
+  +deviceID: string
+  +senderPhone: string
+  +clientType: string
+}
+
+class ScoreResult {
+  +score: int
+  +decision: Decision
+  +explanation: []string
+}
+
+enum Decision {
+  ALLOW
+  FLAG
+  BLOCK
+}
+
+class VelocitySignals {
+  +txnCount5m: int
+  +distinctIPs1h: int
+  +amountSum24h: float
+}
+
+class UserProfile {
+  +p50Amount: float
+  +p95Amount: float
+  +activeHours: []int
+}
+
+class RiskComponents {
+  +device: float
+  +amount: float
+  +time: float
+  +velocity: float
+  +network: float
+  +identity: float
+  +recipient: float
+}
+
+ScoreRequest --> ScoreResult : scoring.Score()
+ScoreRequest --> StoredDevice : uses
+ScoreRequest --> VelocitySignals : uses
+ScoreRequest --> UserProfile : uses
+RiskComponents --> ScoreResult : aggregates
+
+@enduml

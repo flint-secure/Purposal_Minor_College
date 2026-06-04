@@ -1,0 +1,29 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+missfont.log
+
+# Downloaded PlantUML JAR (use brew install plantuml instead)
+tools/plantuml.jar
+
+# Accidental PlantUML output when run from wrong directory
+figures/uml/src/figures/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Optional: uncomment to ignore built PDFs (regenerate with make pdf)
+# proposal.pdf
+# figures/uml/*.pdf

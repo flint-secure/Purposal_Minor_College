@@ -1,0 +1,31 @@
+@startuml 08-activity-scoring
+title Risk Scoring — Activity Diagram
+
+start
+:Fetch device, profile,\nvelocity from Redis;
+:Compute identity risk\n(SIM swap binding);
+if (Quota exceeded?) then (yes)
+  :Return BLOCK;
+  stop
+endif
+partition "scoring.Score() pure function" {
+  :Compute 7 risk components;
+  :Apply interaction terms;
+  if (Hard floor triggered?) then (yes)
+    :Escalate to BLOCK;
+  else (no)
+    :Sum weighted score 0-100;
+  endif
+}
+if (score >= block_threshold?) then (yes)
+  :Decision = BLOCK;
+elseif (score >= flag_threshold?) then (yes)
+  :Decision = FLAG;
+else (no)
+  :Decision = ALLOW;
+endif
+:Return JSON response;
+:Async NATS + velocity write;
+stop
+
+@enduml

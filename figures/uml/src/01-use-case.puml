@@ -1,0 +1,29 @@
+@startuml 01-use-case
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+title Flint Secure — Use Case Diagram
+
+actor "PSP Backend" as PSP
+actor "Mobile / Web SDK" as SDK
+actor "Fraud Analyst" as Analyst
+
+rectangle "Flint Secure Platform" {
+  usecase "Identify Device\n(POST /v1/identify)" as UC1
+  usecase "Score Transaction\n(POST /v1/score)" as UC2
+  usecase "Manage API Keys" as UC3
+  usecase "Review Alerts\n& Thresholds" as UC4
+  usecase "Publish Events\n(NATS)" as UC5
+}
+
+PSP --> UC1
+PSP --> UC2
+PSP --> UC3
+SDK --> UC1
+SDK --> UC2
+Analyst --> UC4
+UC2 ..> UC5 : <<include>>
+UC1 ..> UC5 : <<include>>
+
+@enduml

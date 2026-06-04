@@ -1,0 +1,44 @@
+%% Flint Secure — NCIT Major Project Proposal
+\documentclass[proposal,major]{ncitproject}
+
+\ProjectTitle{FLINT SECURE\\[0.4em]{\large Real-Time Fraud Detection and Device Intelligence Platform}}
+\DegreeName{Bachelor of Engineering in Computer Engineering}
+\DepartmentName{Computer Engineering}
+\SupervisorName{[Supervisor Name]}
+\SupervisorDesignation{[Designation]}
+\SubmissionDate{04 Jun 2026}
+
+\SetStudents{%
+  Aaditya Yadav & 231201 \\
+  Apil Khadka & 231210 \\
+  Ujashna Dangol & 231247 \\
+}
+
+\begin{document}
+
+\maketitlepage
+
+\begin{ncitabstract}
+Flint Secure is a real-time fraud detection and device intelligence platform designed for
+Nepal's digital payment ecosystem. The platform addresses financial fraud in emerging-market
+fintech, where transaction volumes are rising rapidly but prevention infrastructure remains
+immature. Nepal's FATF grey-list status and the documented 70\% increase in SIM swap attacks
+(FIU-Nepal, 2024) underline the need for locally calibrated detection.
+
+The system exposes a device identification API (three-layer fingerprint matching cascade)
+and a risk scoring API across seven signal dimensions: device trust, transaction amount,
+temporal behavior, velocity, network origin, identity consistency, and recipient risk. It
+returns a composite score (0--100) and an ALLOW, FLAG, or BLOCK decision within a sub-50\,ms
+P95 latency target at approximately 3,200 requests per second.
+
+The backend uses Go, dual Redis instances, NATS JetStream, and PostgreSQL, with Android,
+iOS, and JavaScript SDKs and a Python worker pipeline for trust scoring, behavioral
+profiling, and quota management. Validation is planned via a 168-test suite targeting
+$\geq$92\% pass rate.
+\end{ncitabstract}
+
+\Keywords{fraud detection, device fingerprinting, real-time risk scoring, fintech security, Nepal digital payments, FATF compliance, SIM swap detection, behavioral profiling}
+
+\input{sections/body}
+
+\end{document}

@@ -1,0 +1,34 @@
+@startuml 06-sequence-identify
+title POST /v1/identify — Sequence Diagram
+
+actor SDK
+participant "API Gateway" as API
+participant "IdentifyHandler" as H
+database "Redis" as Redis
+
+SDK -> API : POST /v1/identify\n(local_fp, signals, stored_device_id)
+API -> H : authenticate + rate limit
+H -> Redis : GET device:{client}:{local_fp}
+alt Layer 1 — exact hash hit
+  Redis --> H : StoredDevice
+  H --> API : 200 device_id, confidence 0.95
+else Layer 2 — stored ID recovery
+  H -> Redis : GET devid:{client}:{device_id}
+  Redis --> H : StoredDevice
+  H -> Redis : update fingerprint index
+  H --> API : 200 confidence 0.90
+else Layer 3 — fuzzy match
+  H -> Redis : SMEMBERS block key index
+  loop each candidate
+    H -> H : ComputeSimilarity()
+  end
+  alt match >= threshold
+    H --> API : 200 matched device
+  else new device
+    H -> Redis : SET new device + index
+    H --> API : 201 new device_id
+  end
+end
+API --> SDK : JSON response
+
+@enduml
