@@ -187,17 +187,17 @@
 \captionsetup[table]{position=below, skip=0.5em}
 \RequirePackage{booktabs}
 \RequirePackage{tabularx}
-\RequirePackage{cite}
-
 % ---------------------------------------------------------------------------
-% Hyperlinks (black for print)
+% Citations and hyperlinks (clickable [1], [2], … to bibliography)
 % ---------------------------------------------------------------------------
+\RequirePackage[numbers,sort&compress]{natbib}
 \RequirePackage{hyperref}
 \hypersetup{
   colorlinks=true,
   linkcolor=black,
   urlcolor=blue,
   citecolor=black,
+  breaklinks=true,
   pdfauthor={NCIT Project Report}
 }
 

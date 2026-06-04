@@ -1,31 +1,70 @@
 @startuml 01-use-case
-' UML 2.0: actors outside system boundary; left-to-right layout (actors left, system right)
-' Ref: plantuml.com/use-case-diagram, uml-diagrams.org/use-case-reference.html
+' UML 2.0 use case diagram — three primary actors
+' https://www.geeksforgeeks.org/system-design/use-case-diagram/
 left to right direction
 skinparam shadowing false
-skinparam nodesep 70
-skinparam ranksep 35
-skinparam defaultFontSize 13
+skinparam defaultFontSize 10
 skinparam actorStyle stickman
+skinparam usecase {
+  BackgroundColor #FEFECE
+  BorderColor #333333
+}
 skinparam rectangle {
   BorderColor #333333
-  BackgroundColor #FAFAFA
+  BackgroundColor #FFFFFF
 }
 
 actor "PSP Backend" as PSP
 actor "Web SDK" as SDK
 actor "Fraud Analyst" as FA
+PSP -[hidden]down- SDK
+SDK -[hidden]down- FA
 
 rectangle "Flint Secure" <<system>> {
+
   (Identify Device) as UC1
   (Score Transaction) as UC2
   (Review Alerts) as UC3
+  (Identity Graph Lookup) as UC6
+  (Check API Quota) as UC7
+
+  (Manage Integration) as UCM
+  (Manage API Keys) as UC4
+  (Onboard Client) as UC5
+  UCM <|-- UC4
+  UCM <|-- UC5
+
+  (Authenticate Request) as UC_AUTH
+  (Publish Event) as UC_PUB
+  (Update Velocity Counters) as UC_VEL
+  (Build User Profile) as UC_PROF
+
+  UC1 ..> UC_AUTH : <<include>>
+  UC2 ..> UC_AUTH : <<include>>
+  UC1 ..> UC_PUB : <<include>>
+  UC2 ..> UC_PUB : <<include>>
+  UC2 ..> UC_VEL : <<include>>
+  UC_PUB ..> UC_PROF : <<include>>
+
+  (Verify HMAC Signature) as UC_HMAC
+  (SIM Swap Check) as UC_SIM
+  (Report Fraud Label) as UC_FRAUD
+
+  UC_HMAC ..> UC2 : <<extend>>
+  UC_SIM ..> UC2 : <<extend>>
+  UC3 ..> UC2 : <<extend>>
+  UC_FRAUD ..> UC3 : <<extend>>
 }
 
 PSP --> UC1
 PSP --> UC2
+PSP --> UC4
+PSP --> UC5
+PSP --> UC7
 SDK --> UC1
 SDK --> UC2
 FA --> UC3
+FA --> UC6
+FA --> UC_FRAUD
 
 @enduml
