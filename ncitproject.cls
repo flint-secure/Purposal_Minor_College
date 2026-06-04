@@ -4,7 +4,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{ncitproject}[2019/05/24 NCIT Academic Project Report Class]
 
-\LoadClass[11pt,a4paper,oneside]{article}
+\LoadClass[12pt,a4paper,oneside]{article}
 
 % ---------------------------------------------------------------------------
 % Class options
@@ -86,28 +86,33 @@
 \onehalfspacing
 \RequirePackage[skip=6pt]{parskip}
 \setlength{\parindent}{0pt}
+\if@ncitproposal
+  \setlength{\parskip}{4pt}
+\fi
 
 % ---------------------------------------------------------------------------
-% Headers, footers — project title; [current/total] at bottom centre
+% Footers only — page number centred; no header text
 % ---------------------------------------------------------------------------
 \RequirePackage{fancyhdr}
 \RequirePackage{etoolbox}
 
 \newcommand{\ncit@projecttitle}{}
-\newcommand{\ProjectTitle}[1]{\renewcommand{\ncit@projecttitle}{#1}}
+\newcommand{\ProjectTitle}[1]{%
+  \renewcommand{\ncit@title}{#1}%
+  \renewcommand{\ncit@projecttitle}{#1}%
+}
+\newcommand{\ProjectHeaderTitle}[1]{\renewcommand{\ncit@projecttitle}{#1}}
 
+\setlength{\headheight}{14pt}
 \pagestyle{fancy}
 \fancyhf{}
-\renewcommand{\headrulewidth}{0.4pt}
-\fancyhead[C]{\small\normalfont\ncit@projecttitle}
-\fancyfoot[C]{\small [\thepage/\pageref{LastPage}]}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C]{\small\thepage}
 \fancypagestyle{plain}{%
   \fancyhf{}
   \renewcommand{\headrulewidth}{0pt}
-  \fancyfoot[C]{\small [\thepage/\pageref{LastPage}]}
+  \fancyfoot[C]{\small\thepage}
 }
-
-\AtEndDocument{\label{LastPage}}
 
 % ---------------------------------------------------------------------------
 % Section numbering (legal / decimal style) and new page per section
@@ -116,7 +121,9 @@
 \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
 \renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
 
-% Final/mid-term: each section on a new page (guideline). Proposal: continuous flow (8--10 pages).
+% Final/mid-term: each section on a new page (Guidelines 2019).
+% Proposal: continuous flow to stay within the 8--10 page limit (references in
+% Refrence_pdf_projects_old/ are final reports, not proposal samples).
 \if@ncitproposal\else
   \pretocmd{\section}{\clearpage}{}{}
 \fi
@@ -132,75 +139,55 @@
 \renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
   {-6pt \@plus -2pt \@minus -2pt}{6pt \@plus 2pt}%
   {\normalfont\normalsize\itshape}}
-
-% ---------------------------------------------------------------------------
-% UML 2.0 figure placeholder — replace with \umlfigure when PDF is ready
-% ---------------------------------------------------------------------------
-\newcommand{\umlplaceholder}[4]{%
-  \begin{figure}[ht]
-    \centering
-    \fbox{%
-      \parbox[c][0.36\textwidth][c]{0.9\textwidth}{%
-        \centering\small
-        \textbf{UML 2.0 --- #4}\\[0.8em]
-        \textit{Placeholder --- insert diagram before defense}\\[0.6em]
-        \texttt{figures/uml/#3}%
-      }%
-    }
-    \caption{#2}
-    \label{fig:#1}
-  \end{figure}%
-}
-
-% \umlfigure[scale]{label}{basename}{short caption}
-\newcommand{\uml@include}[2]{%
-  \IfFileExists{figures/uml/#1.pdf}{\includegraphics[#2]{figures/uml/#1}}{%
-    \IfFileExists{figures/uml/#1.png}{\includegraphics[#2]{figures/uml/#1}}{%
-      \fbox{\parbox[c][0.2\textheight][c]{0.9\linewidth}{\centering\small Missing #1}}}}%
-}
-\newcommand{\umlfigure}[4][0.92]{%
-  \begin{figure}[H]
-    \centering
-    \uml@include{#2}{width=#1\linewidth}
-    \caption{#4}
-    \label{fig:#3}
-  \end{figure}%
-}
-% \umlfigurepair[scale]{fileL}{labelL}{capL}{fileR}{labelR}{capR}
-\newcommand{\umlfigurepair}[7][0.46]{%
-  \begin{figure}[H]
-    \centering
-    \begin{subfigure}[t]{#1\linewidth}
-      \centering
-      \uml@include{#2}{width=\linewidth}
-      \caption{#4}
-      \label{fig:#3}
-    \end{subfigure}\hfill
-    \begin{subfigure}[t]{#1\linewidth}
-      \centering
-      \uml@include{#5}{width=\linewidth}
-      \caption{#7}
-      \label{fig:#6}
-    \end{subfigure}
-  \end{figure}%
-}
+\if@ncitproposal
+  \renewcommand\section{\@startsection{section}{1}{\z@}%
+    {-4pt \@plus -1pt \@minus -1pt}{4pt \@plus 1pt}%
+    {\normalfont\large\bfseries}}
+\fi
 
 % ---------------------------------------------------------------------------
 % Figures, tables, equations (centred; captions; equation numbers right)
 % ---------------------------------------------------------------------------
-\RequirePackage{float}
 \RequirePackage{graphicx}
 \RequirePackage{amsmath,amssymb}
 \RequirePackage{caption}
 \RequirePackage{subcaption}
+
+% ---------------------------------------------------------------------------
+% UML diagrams — inline (non-floating) so they never move below References
+% ---------------------------------------------------------------------------
+\newcommand{\uml@include}[2]{%
+  \IfFileExists{figures/uml/#1.pdf}{%
+    \includegraphics[#2,keepaspectratio]{figures/uml/#1}}{%
+    \IfFileExists{figures/uml/#1.png}{%
+      \includegraphics[#2,keepaspectratio]{figures/uml/#1}}{%
+      \fbox{\parbox[c][0.12\textheight][c]{0.9\linewidth}{\centering\small Missing #1}}}}%
+}
+% \umlfigure[width factor]{label}{basename}{caption}
+\newcommand{\umlfigure}[4][1.0]{%
+  \par\vspace{0.2em}%
+  \begin{center}%
+    \if@ncitproposal
+      \uml@include{#3}{width=#1\linewidth,height=0.28\textheight}%
+    \else
+      \uml@include{#3}{width=#1\linewidth,height=0.15\textheight}%
+    \fi
+  \end{center}%
+  \vspace{0.1em}%
+  \captionof{figure}{#4}%
+  \label{fig:#2}%
+  \par\vspace{0.2em}%
+}
 \captionsetup{
   font=small,
   labelfont=bf,
   justification=centering,
   singlelinecheck=false
 }
+\captionsetup[table]{position=below, skip=0.5em}
 \RequirePackage{booktabs}
 \RequirePackage{tabularx}
+\RequirePackage{cite}
 
 % ---------------------------------------------------------------------------
 % Hyperlinks (black for print)
@@ -215,19 +202,21 @@
 }
 
 % ---------------------------------------------------------------------------
-% Front matter / main matter page numbering
-% Roman: Acknowledgement through List of Tables
-% Arabic: Introduction onward
+% Page numbering (Guidelines 2019)
+% Roman (I, II, III…): front matter through List of Tables/Figures
+% Arabic (1, 2, 3…): main report body from first numbered section onward
 % ---------------------------------------------------------------------------
 \newcommand{\frontmatter}{%
   \clearpage
-  \pagenumbering{roman}
+  \pagenumbering{roman}%
   \setcounter{page}{1}%
+  \renewcommand{\thepage}{\Roman{page}}%
 }
 \newcommand{\mainmatter}{%
   \clearpage
-  \pagenumbering{arabic}
+  \pagenumbering{arabic}%
   \setcounter{page}{1}%
+  \renewcommand{\thepage}{\arabic{page}}%
 }
 
 % ---------------------------------------------------------------------------
@@ -260,7 +249,7 @@
 }
 
 \newcommand{\ncit@students}{%
-  Student Name & Roll No. XXXXXX \\
+  Student Name, Roll No. XXXXXX \\
 }
 
 \newcommand{\SetStudents}[1]{\renewcommand{\ncit@students}{#1}}
@@ -268,9 +257,28 @@
   \g@addto@macro\ncit@students{#1 & #2 \\}%
 }
 
-\newcommand{\ncit@collegebanner}{%
-  {\ncit@collegefont
-    NEPAL COLLEGE OF\\INFORMATION TECHNOLOGY}%
+\newcommand{\ncit@collegelogo}{college_logo.png}
+\newcommand{\CollegeLogo}[1]{\renewcommand{\ncit@collegelogo}{#1}}
+
+% NCIT letterhead block (logo left, department + college name right — college sample)
+\newcommand{\ncit@collegefooter}{%
+  \noindent
+  \begin{minipage}[c]{0.24\textwidth}
+    \centering
+    \IfFileExists{\ncit@collegelogo}{%
+      \includegraphics[height=2.4cm,keepaspectratio]{\ncit@collegelogo}}{%
+      \fbox{\parbox[c][2.5cm][c]{0.9\linewidth}{\centering\small Logo}}}%
+  \end{minipage}%
+  \hfill
+  \begin{minipage}[c]{0.73\textwidth}
+    {\fontsize{14}{17}\bfseries Department of \ncit@department\par}
+    \vspace{0.4em}
+    {\ncit@collegefont NEPAL COLLEGE OF\par}
+    \vspace{0.15em}
+    {\ncit@collegefont\underline{INFORMATION TECHNOLOGY}\par}
+    \vspace{0.4em}
+    {\fontsize{14}{18}\selectfont Balkumari, Lalitpur, Nepal.}%
+  \end{minipage}%
 }
 
 \newcommand{\maketitlepage}{%
@@ -278,33 +286,33 @@
   \begin{titlepage}
     \thispagestyle{empty}
     \centering
-    \vspace*{1.5cm}
-    {\large
-      A \textbf{\ncit@projectkind} Project \textbf{\ncit@reportstage} Report on\\[0.5em]
+    \vspace*{0.5cm}
+    {\fontsize{14}{18}\selectfont
+      A \ncit@projectkind\ Project \ncit@reportstage\ Report on\\[0.65em]
+      {\fontsize{16}{20}\bfseries\selectfont \ncit@title}\\[1.2em]
+      Submitted in Partial Fulfillment of the Requirements for\\[0.35em]
+      the Degree of \textbf{\ncit@degree}\\[0.25em]
+      under Pokhara University\\[1.2em]
+      Submitted by:\\[0.4em]
+      \begin{tabular}{@{}c@{}}
+        \ncit@students
+      \end{tabular}\\[1.2em]
       \if@ncitproposal
-        {\normalsize (Initial submission --- proposal defense)}\\[0.8em]
+        Date:\\
+        \ncit@date\\[1em]
+      \else
+        Under the supervision of\\[0.5em]
+        \textbf{\ncit@supervisor}\\
+        \ncit@supervisordesignation\\[2em]
+        Date:\\
+        \ncit@date\\[2em]
+        Department of \textbf{\ncit@department}\\[2em]
       \fi
-      {\bfseries\large \ncit@title}\\[2em]
-      Submitted in Partial Fulfillment of the Requirements for\\[0.6em]
-      the Degree of \textbf{\ncit@degree}\\[0.4em]
-      under Pokhara University\\[2em]
-      Submitted by:\\[0.8em]
     }
-    \begin{tabular}{@{}l@{\quad}l@{}}
-      \ncit@students
-    \end{tabular}\\[2em]
-    {\large
-      Under the supervision of\\[0.6em]
-      \textbf{\ncit@supervisor}\\[0.3em]
-      \ncit@supervisordesignation\\[2em]
-      Date: \ncit@date\\[3em]
-      Department of \textbf{\ncit@department}\\[4em]
-    }
-    \ncit@collegebanner\\[0.6em]
-    {\large Balkumari, Lalitpur, Nepal.}
     \vfill
+    \ncit@collegefooter
+    \vspace{0.25cm}
   \end{titlepage}
-  \ProjectTitle{\ncit@title}
 }
 
 % ---------------------------------------------------------------------------
@@ -315,10 +323,53 @@
 
 \newenvironment{ncitabstract}{%
   \clearpage
-  \section*{Abstract}
-  \addcontentsline{toc}{section}{Abstract}
+  \pagenumbering{roman}%
+  \setcounter{page}{1}%
+  \renewcommand{\thepage}{\Roman{page}}%
+  \pagestyle{fancy}
+  \begin{center}
+    {\bfseries ABSTRACT}
+  \end{center}
+  \vspace{0.35em}
+  \noindent
 }{%
-  \par\vspace{1em}\noindent\textbf{Keywords:} \ncit@keywords
+  \par\vspace{0.8em}%
+  \noindent\textbf{Keywords:} \ncit@keywords
+  \phantomsection
+  \addcontentsline{toc}{section}{Abstract}%
+}
+
+% List of Figures, List of Tables, Table of Contents (Roman page numbers in footer)
+\newcommand{\ncit@frontlisttitle}[1]{%
+  \begin{center}{\bfseries\Large #1}\end{center}%
+  \vspace{0.25em}%
+}
+\renewcommand{\listoffigures}{%
+  \vspace{1em}%
+  \ncit@frontlisttitle{\listfigurename}%
+  \begingroup\small
+  \@starttoc{lof}%
+  \endgroup
+}
+\renewcommand{\listoftables}{%
+  \vspace{1em}%
+  \ncit@frontlisttitle{\listtablename}%
+  \begingroup\small
+  \@starttoc{lot}%
+  \endgroup
+}
+\renewcommand{\tableofcontents}{%
+  \clearpage
+  \ncit@frontlisttitle{\contentsname}%
+  \begingroup\small
+  \@starttoc{toc}%
+  \endgroup
+}
+\newcommand{\ncitprintfrontmatter}{%
+  \tableofcontents
+  \listoftables
+  \listoffigures
+  \mainmatter
 }
 
 % ---------------------------------------------------------------------------

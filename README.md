@@ -1,6 +1,11 @@
-# NCIT Project Report (LaTeX)
+# NCIT Project Report (LaTeX) — Flint Secure
 
-Formatting follows **Nepal College of Information Technology — Academic Project Guidelines 2019** (`Project_Guideline-2019.pdf`).
+College **minor-project proposal** (PDF) and UML for **Flint Secure**. The running product is developed in a separate repository:
+
+**Planning docs (future tense — for authors & UML):** [`docs/README.md`](docs/README.md)  
+**Optional dev codebase:** `/Users/pablo/Development/Work/Flintsecure/flint_secure` (do not describe as “implemented” in the proposal PDF; see [`docs/WRITING-GUIDE.md`](docs/WRITING-GUIDE.md))
+
+Formatting follows **Nepal College of Information Technology — Academic Project Guidelines 2019** (`Project_Guideline-2019.pdf`). Sample **final** reports in `Refrence_pdf_projects_old/` are not the proposal template.
 
 ## Files
 
@@ -54,7 +59,7 @@ Use class options on the first line:
 - A4, portrait, 1″ margins + 0.5″ left binding offset  
 - Times New Roman 12 pt body; Helvetica bold 20 pt college name on cover  
 - 1.5 line spacing; 6 pt paragraph spacing  
-- Header: project title; footer: `[current/total]` page numbers  
+- No header; footer: Roman (`I`, `II`…) on abstract and front lists, then Arabic (`1`, `2`…) from Problem Statement onward (per guideline)  
 - Each `\section` starts on a new page; legal-style numbering (1, 1.1, …)  
 - Centred figures/tables with captions; numbered equations  
 - `\frontmatter` → Roman pages; `\mainmatter` → Arabic (for final reports)  
@@ -77,19 +82,23 @@ Saved in `archive/` for later reports:
 - `archive/scope-and-limitations.tex`
 - `archive/future-work.tex`
 
-## Proposal sections (initial proposal)
+## Proposal sections (NCIT Guidelines 2019 — initial proposal, 8–10 pages)
 
-1. Title page (`\maketitlepage`)  
-2. Abstract + keywords (max ~250 words)  
+Matches `Project_Guideline-2019.pdf` (not the long **final** reports in `Refrence_pdf_projects_old/`).
+
+1. Title page (Appendix A: 14 pt body, 16 pt title, Arial Black college name)  
+2. **ABSTRACT** (single paragraph, max 250 words) + **Keywords:** (≥10)  
 3. Problem Statement  
-4. Project Objectives  
+4. Project Objectives (one **Main Objective** subsection)  
 5. Significance of the Study  
-6. Literature Study/Review  
-7. Proposed Methodology (includes UML 2.0 placeholders)  
-8. Proposed Performance Analysis and Validation  
+6. Literature Study/Review (≥15% of body text)  
+7. Proposed Methodology / technical description (SDLC, tools table, build steps, UML 2.0)  
+8. Proposed Performance Analysis and Validation Scheme  
 9. Proposed Deliverable/Output  
 10. Project Task and Time Schedule  
 11. Bibliography/References  
+
+**Deferred** (saved in `archive/`, not in the initial proposal): Scope and Limitations, Further Works.
 
 ## Mid-term / final
 

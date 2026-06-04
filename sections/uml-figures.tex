@@ -1,11 +1,8 @@
-%% UML 2.0 models (PlantUML sources in figures/uml/src/) — compact layout for 8--10 page proposal
-\subsubsection{UML 2.0 Design Models}
+%% Design diagrams (non-floating) inside Methodology
+\subsection{System Design Diagrams}
 
-Figures~\ref{fig:uml-use-case}--\ref{fig:uml-seq-score} summarise the proposed architecture.
-Additional models (deployment, class, activity) are kept as PlantUML source in the repository
-and will be expanded in the mid-term report after proposal approval.
+Figures~\ref{fig:uml-use-case} and~\ref{fig:uml-seq-score} summarise the proposed architecture.
 
-\umlfigurepair[0.44]{01-use-case}{uml-use-case}{Use case model}{03-component}{uml-component}{Component model}
+\umlfigure[1.0]{uml-use-case}{01-use-case}{Use case diagram: PSP backend, web SDK, and fraud analyst.}
 
-\vspace{0.5em}
-\umlfigurepair[0.44]{06-sequence-identify}{uml-seq-identify}{Sequence: device identify}{07-sequence-score}{uml-seq-score}{Sequence: transaction score}
+\umlfigure[1.0]{uml-seq-score}{07-sequence-score}{Sequence diagram: scoring flow with Redis and NATS JetStream.}

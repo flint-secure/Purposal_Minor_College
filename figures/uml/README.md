@@ -6,7 +6,7 @@ Diagrams are written in **PlantUML** (`.puml`) — text files you edit like code
 
 | Source file | Diagram |
 |-------------|---------|
-| `src/01-use-case.puml` | Use case |
+| `src/01-use-case.puml` | Use case (see `docs/USE-CASES.md` for UC-01…UC-12) |
 | `src/02-system-context.puml` | System context |
 | `src/03-component.puml` | Component |
 | `src/04-deployment.puml` | Deployment |
@@ -37,9 +37,13 @@ This installs PlantUML and Graphviz (`dot`) for layout. A Java-only fallback dow
 open figures/uml/06-sequence-identify.pdf
 ```
 
+## Proposal vs mid-term wording
+
+Diagrams **`01-use-case`** and **`07-sequence-score`** (included in the initial proposal) use **plain-language** labels—no `/v1/...` paths. Other `.puml` files may keep technical endpoint names for later reports; canonical paths are in `docs/API-OVERVIEW.md`.
+
 ## LaTeX integration
 
-`sections/uml-figures.tex` uses `\umlfigure{label}{basename}{caption}`.
+`sections/uml-figures.tex` uses `\umlfigure[scale]{label}{basename}{caption}` (e.g.\ `01-use-case` PDF basename).
 The basename matches the `.puml` filename (without extension).
 
 ## PlantUML syntax reference

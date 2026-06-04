@@ -1,25 +1,40 @@
 @startuml 07-sequence-score
-title POST /v1/score — Sequence Diagram
+hide footbox
+skinparam shadowing false
+skinparam sequenceMessageAlign center
 
-actor PSP
-participant "Middleware Chain" as MW
-participant "ScoreHandler" as H
-participant "scoring.Score()" as S <<pure>>
+actor "PSP" as PSP
+participant "API Gateway" as API
+participant "Score Handler" as H
 database "Redis" as Redis
-queue "NATS" as NATS
+queue "NATS JetStream" as NATS
 
-PSP -> MW : POST /v1/score
-MW -> MW : GeoIP, API key, rate limit,\noptional HMAC verify
-MW -> H : ScoreRequest
-par Redis pipeline
-  H -> Redis : device + profile + velocity
-end
-H -> H : SIM swap check (phone hash)
-H -> H : quota INCR
-H -> S : pre-fetched signals
-S --> H : ScoreResult (0-100)
-H --> PSP : ALLOW | FLAG | BLOCK
-H ->> NATS : async publish transactions.scored
-H ->> Redis : async velocity record
+PSP -> API : score transaction request
+activate API
+
+API -> API : validate request
+API -> H : forward to score handler
+activate H
+
+H -> Redis : read device and velocity data
+activate Redis
+Redis --> H : cached signals
+deactivate Redis
+
+H -> H : calculate score and decision
+
+H ->> NATS : publish scored transaction event
+activate NATS
+deactivate NATS
+
+H -> Redis : update velocity counters
+activate Redis
+deactivate Redis
+
+H --> API : ALLOW / FLAG / BLOCK
+deactivate H
+
+API --> PSP : response
+deactivate API
 
 @enduml

@@ -1,6 +1,6 @@
 # Deferred content (not in initial proposal)
 
-These sections are **saved for mid-term and final reports**, per team decision for the initial proposal.
+These sections are **omitted from the initial proposal** to keep it shorter and easier to read. Restore them for mid-term or final reports.
 
 | File | NCIT section | When to use |
 |------|----------------|-------------|

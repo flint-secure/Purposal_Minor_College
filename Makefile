@@ -21,10 +21,13 @@ pdf: uml $(MAIN).pdf
 $(MAIN).pdf: $(MAIN).tex $(CLS) sections/*.tex $(UML_PDF)
 	$(LATEX) $(LATEXFLAGS) $(MAIN).tex
 	$(LATEX) $(LATEXFLAGS) $(MAIN).tex
+	$(LATEX) $(LATEXFLAGS) $(MAIN).tex
 
 clean:
-	rm -f $(MAIN).{aux,log,out,toc,fls,fdb_latexmk,synctex.gz}
+	rm -f $(MAIN).{aux,log,out,toc,lof,lot,fls,fdb_latexmk,synctex.gz}
 	rm -f figures/uml/*.pdf
+
+pdf-clean: clean pdf
 
 clean-all: clean
 	rm -f tools/plantuml.jar

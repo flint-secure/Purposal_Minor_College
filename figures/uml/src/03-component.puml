@@ -41,7 +41,7 @@ note right of [scoring]
   no I/O inside engine
 end note
 
-package "python_workers" {
+package "go_workers" {
   [device_indexer]
   [transaction_indexer]
   [user_profile_builder]

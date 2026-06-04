@@ -15,7 +15,7 @@ package "Flint Secure" {
   database "Redis Cache" as R2
   database "PostgreSQL" as PG
   queue "NATS JetStream" as NATS
-  [Python Worker Pipeline] as W
+  [Go Worker Pipeline] as W
 }
 
 PSP --> API : HTTPS
