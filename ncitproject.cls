@@ -290,32 +290,34 @@
   \begin{titlepage}
     \thispagestyle{empty}
     \centering
-    \vspace*{0.5cm}
+    \vspace*{2.2cm}
     {\fontsize{14}{18}\selectfont
-      A \ncit@projectkind\ Project \ncit@reportstage\ Report on\\[0.65em]
-      {\fontsize{16}{20}\bfseries\selectfont \ncit@title}\\[1.2em]
-      Submitted in Partial Fulfillment of the Requirements for\\[0.35em]
-      the Degree of \textbf{\ncit@degree}\\[0.25em]
-      under Pokhara University\\[1.2em]
-      Submitted by:\\[0.4em]
+      A \ncit@projectkind\ Project \ncit@reportstage\ Report on\\[0.85em]
+      {\fontsize{16}{22}\bfseries\selectfont \ncit@title\par}
+      \vspace{1.4em}
+      Submitted in Partial Fulfillment of the Requirements for\\[0.45em]
+      the Degree of \textbf{\ncit@degree}\\[0.4em]
+      under Pokhara University\par
+      \vspace{0.21\textheight}
+      Submitted by:\par
+      \vspace{0.65em}
+      {\bfseries
       \begin{tabular}{@{}c@{}}
         \ncit@students
-      \end{tabular}\\[1.2em]
-      \if@ncitproposal
-        Date:\\
-        \ncit@date\\[1em]
-      \else
-        Under the supervision of\\[0.5em]
-        \textbf{\ncit@supervisor}\\
-        \ncit@supervisordesignation\\[2em]
-        Date:\\
-        \ncit@date\\[2em]
-        Department of \textbf{\ncit@department}\\[2em]
-      \fi
+      \end{tabular}\par}
+      \vspace{2.4em}
+      Under the supervision of\par
+      \vspace{0.55em}
+      \textbf{\ncit@supervisor}\par
+      \ifstrempty{\ncit@supervisordesignation}{}{\ncit@supervisordesignation\par}
+      \vspace{2.4em}
+      Date:\par
+      \vspace{0.45em}
+      \ncit@date\par
     }
     \vfill
     \ncit@collegefooter
-    \vspace{0.25cm}
+    \vspace{0.6cm}
   \end{titlepage}
 }
 
