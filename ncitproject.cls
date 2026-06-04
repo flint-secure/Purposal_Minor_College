@@ -72,7 +72,7 @@
 \geometry{
   a4paper,
   portrait,
-  left=1.5in,
+  left=1in,
   right=1in,
   top=1in,
   bottom=1in,
@@ -86,15 +86,17 @@
 \onehalfspacing
 \RequirePackage[skip=6pt]{parskip}
 \setlength{\parindent}{0pt}
-\if@ncitproposal
-  \setlength{\parskip}{4pt}
-\fi
 
 % ---------------------------------------------------------------------------
-% Footers only — page number centred; no header text
+% Headers and footers (Guidelines 2019: project title; [page/total] centred)
 % ---------------------------------------------------------------------------
 \RequirePackage{fancyhdr}
 \RequirePackage{etoolbox}
+
+\AtEndDocument{\label{LastPage}}
+\newcommand{\ncit@pageoftotal}{%
+  [\thepage/\pageref{LastPage}]%
+}
 
 \newcommand{\ncit@projecttitle}{}
 \newcommand{\ProjectTitle}[1]{%
@@ -106,12 +108,14 @@
 \setlength{\headheight}{14pt}
 \pagestyle{fancy}
 \fancyhf{}
+\fancyhead[C]{\small\ncit@projecttitle}
 \renewcommand{\headrulewidth}{0pt}
-\fancyfoot[C]{\small\thepage}
+\fancyfoot[C]{\small\ncit@pageoftotal}
 \fancypagestyle{plain}{%
   \fancyhf{}
+  \fancyhead[C]{\small\ncit@projecttitle}
   \renewcommand{\headrulewidth}{0pt}
-  \fancyfoot[C]{\small\thepage}
+  \fancyfoot[C]{\small\ncit@pageoftotal}
 }
 
 % ---------------------------------------------------------------------------

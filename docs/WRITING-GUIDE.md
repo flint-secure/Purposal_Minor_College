@@ -20,7 +20,27 @@ The LaTeX source (`sections/body.tex`, `proposal.tex`) already follows this rule
 
 **Punctuation in proposal LaTeX:** Do not use `---` (em dash) or decorative `--` in body text. Use colons for step labels (`Step 1:`), parentheses for asides, and the word **to** for week ranges (`Weeks 2 to 3`). Bibliography page ranges may keep standard en-dashes (`235--255`).
 
-**Page numbers (Guidelines 2019):** **Roman** (`I`, `II`, `III`…) on the abstract, Table of Contents, List of Tables, and List of Figures (footer and page column in those lists). **Arabic** (`1`, `2`, `3`…) from the first main section (Problem Statement) through the end. Figure/table entries in LOF/LOT show Arabic page numbers where the item appears in the body.
+**Page numbers (Guidelines 2019):** **Roman** (`I`, `II`, `III`…) on the abstract, Table of Contents, List of Tables, and List of Figures (footer and page column in those lists). **Arabic** (`1`, `2`, `3`…) from the first main section (Problem Statement) through the end. Footer format is **`[current/total]`** (e.g. `[5/9]`) on every numbered page; the header shows the short project title (`\ProjectHeaderTitle`).
+
+## Format compliance (Guidelines 2019 — Detailed Format)
+
+| Requirement | Proposal (`proposal.pdf`) | Notes |
+|-------------|---------------------------|--------|
+| A4, portrait, single-sided | Yes | `oneside` in class |
+| Margins 1″ + 0.5″ left binding | Yes | `geometry`: 1″ sides + `bindingoffset=0.5in` |
+| 1.5 line spacing | Yes | `\onehalfspacing` |
+| 6 pt paragraph spacing | Yes | `parskip` package |
+| Footer `[n/total]`, header = project title | Yes | `fancyhdr` + `lastpage` |
+| Times New Roman 12 pt body | Yes | XeLaTeX `fontspec` |
+| Headings stepwise (below title size) | Yes | section / subsection / subsubsection |
+| Figures/tables centred, numbered captions | Yes | `\umlfigure`, `caption`, `booktabs` |
+| Equations centred, numbers at margin | N/A in proposal | No numbered equations yet |
+| Legal numbering (1, 1.1, 1.1.1) | Yes | Standard LaTeX |
+| Roman then Arabic page numbers | Yes | Abstract–LOF Roman; body Arabic from Problem Statement |
+| Each section starts on a new page | **No** (proposal only) | Kept continuous to stay within the **8–10 page** proposal limit; enabled for mid-term/final via class (not `proposal` option) |
+| Acknowledgement before Roman front matter | N/A | Initial proposal has no acknowledgement page |
+
+Full final/mid-term reports should use `\documentclass{ncitproject}` without the `proposal` option so each `\section` begins on a new page.
 
 ## What `docs/` is for
 

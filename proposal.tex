@@ -18,7 +18,7 @@
 
 \maketitlepage
 
-\Keywords{fraud detection, device fingerprinting, risk scoring, payment service provider, SIM swap, behavioral profiling, Go, Redis, NATS, PostgreSQL, fintech, Nepal, API security}
+\Keywords{fraud detection, device fingerprinting, device intelligence, risk scoring, payment service provider, SIM swap, digital payments, transaction monitoring, Nepal, web SDK}
 
 \begin{ncitabstract}
 Nepal's digital payments are growing fast, but many payment providers still use simple fixed rules that miss organised fraud. SIM swap attacks increased sharply in recent years~\cite{fiu2024}, and banks face stronger compliance checks. This project proposes \textbf{Flint Secure}: a fraud and device-intelligence service that Nepali providers can host themselves. The team will build a Go-based API and Go background workers with Redis, NATS, and PostgreSQL. Two main services are planned: a \textbf{device identification API} using a three-step fingerprint match, and a \textbf{transaction scoring API} using seven risk factors plus SIM-swap safety rules. A web SDK will collect device signals safely on the client side. The expected outcome is faster, clearer fraud decisions (ALLOW, FLAG, or BLOCK), with scoring designed to stay under 50\,ms for most requests and about 3,200 requests per second in load tests. Success will be checked using k6 load scripts and roughly 168 automated test cases (at least 92\% pass rate), as required for the minor project.
