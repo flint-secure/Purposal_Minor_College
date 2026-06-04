@@ -1,7 +1,7 @@
-%% Flint Secure — NCIT Major Project Proposal
-\documentclass[proposal,major]{ncitproject}
+%% Flint Secure — NCIT Initial Project Proposal (Guidelines 2019)
+\documentclass[proposal,minor]{ncitproject}
 
-\ProjectTitle{FLINT SECURE\\[0.4em]{\large Real-Time Fraud Detection and Device Intelligence Platform}}
+\ProjectTitle{Flint Secure\\[0.35em]{\large Real-Time Fraud Detection and Device Intelligence Platform}}
 \DegreeName{Bachelor of Engineering in Computer Engineering}
 \DepartmentName{Computer Engineering}
 \SupervisorName{[Supervisor Name]}
@@ -19,26 +19,28 @@
 \maketitlepage
 
 \begin{ncitabstract}
-Flint Secure is a real-time fraud detection and device intelligence platform designed for
-Nepal's digital payment ecosystem. The platform addresses financial fraud in emerging-market
-fintech, where transaction volumes are rising rapidly but prevention infrastructure remains
-immature. Nepal's FATF grey-list status and the documented 70\% increase in SIM swap attacks
-(FIU-Nepal, 2024) underline the need for locally calibrated detection.
+Nepal's digital payment sector is expanding quickly, but most payment service providers still
+depend on static, rule-based fraud checks. Flint Secure is proposed as a real-time fraud
+detection and device intelligence platform calibrated for Nepal's market, where SIM swap
+attacks rose 70\% year-on-year (FIU-Nepal, 2024) and FATF compliance pressure requires
+stronger controls.
 
-The system exposes a device identification API (three-layer fingerprint matching cascade)
-and a risk scoring API across seven signal dimensions: device trust, transaction amount,
-temporal behavior, velocity, network origin, identity consistency, and recipient risk. It
-returns a composite score (0--100) and an ALLOW, FLAG, or BLOCK decision within a sub-50\,ms
-P95 latency target at approximately 3,200 requests per second.
+The platform will expose \texttt{/v1/identify} for stable device identity across software
+updates (three-layer fingerprint matching) and \texttt{/v1/score} for composite risk over
+seven dimensions: device trust, amount, time, velocity, network, identity, and recipient.
+Each transaction will receive a score from 0--100 and a decision of ALLOW, FLAG, or BLOCK,
+with a design target of under 50\,ms P95 latency at roughly 3,200 requests per second.
 
-The backend uses Go, dual Redis instances, NATS JetStream, and PostgreSQL, with Android,
-iOS, and JavaScript SDKs and a Python worker pipeline for trust scoring, behavioral
-profiling, and quota management. Validation is planned via a 168-test suite targeting
-$\geq$92\% pass rate.
+Implementation is planned in Go with dual Redis instances, NATS JetStream, PostgreSQL,
+multi-platform SDKs, and Python workers for profiling and trust updates. Success will be
+measured through load testing and a 168-case automated test suite with at least 92\% pass
+rate, aligned with Pokhara University minor-project requirements and NCIT proposal-defense
+criteria.
 \end{ncitabstract}
 
 \Keywords{fraud detection, device fingerprinting, real-time risk scoring, fintech security, Nepal digital payments, FATF compliance, SIM swap detection, behavioral profiling}
 
+\input{sections/proposal-notice}
 \input{sections/body}
 
 \end{document}

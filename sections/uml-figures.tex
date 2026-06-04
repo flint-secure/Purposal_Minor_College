@@ -1,22 +1,11 @@
-%% UML 2.0 — source code in figures/uml/src/*.puml (PlantUML)
-%% Build: make uml   then: make pdf
-\subsection{UML 2.0 Design Models}
+%% UML 2.0 models (PlantUML sources in figures/uml/src/) — compact layout for 8--10 page proposal
+\subsubsection{UML 2.0 Design Models}
 
-The diagrams below are generated from PlantUML source files in \texttt{figures/uml/src/}.
-Edit the \texttt{.puml} files and run \texttt{make uml} to refresh the PDFs included here.
+Figures~\ref{fig:uml-use-case}--\ref{fig:uml-seq-score} summarise the proposed architecture.
+Additional models (deployment, class, activity) are kept as PlantUML source in the repository
+and will be expanded in the mid-term report after proposal approval.
 
-\umlfigure{uml-use-case}{01-use-case}{Use case diagram --- PSP backend, mobile SDK, and fraud analyst interacting with identify, score, and administration capabilities.}
+\umlfigurepair[0.44]{01-use-case}{uml-use-case}{Use case model}{03-component}{uml-component}{Component model}
 
-\umlfigure{uml-context}{02-system-context}{System context diagram --- Flint Secure boundary with Go API, dual Redis, PostgreSQL, NATS workers, and MaxMind GeoIP.}
-
-\umlfigure{uml-component}{03-component}{Component diagram --- Go API packages (handlers, scoring, matching, velocity, middleware) and Python workers.}
-
-\umlfigure{uml-deployment}{04-deployment}{Deployment diagram --- Oracle Cloud ARM64 application VM, PostgreSQL host, PSP backend, and device SDKs.}
-
-\umlfigure{uml-class}{05-class-domain}{Class diagram --- core domain types including \texttt{StoredDevice}, \texttt{ScoreRequest}, \texttt{ScoreResult}, and risk components.}
-
-\umlfigure{uml-seq-identify}{06-sequence-identify}{Sequence diagram --- \texttt{POST /v1/identify} three-layer device matching cascade.}
-
-\umlfigure{uml-seq-score}{07-sequence-score}{Sequence diagram --- \texttt{POST /v1/score} middleware chain, Redis pipeline, pure scoring, and async NATS publish.}
-
-\umlfigure{uml-activity-scoring}{08-activity-scoring}{Activity diagram --- risk scoring from signal fetch through ALLOW, FLAG, or BLOCK decision.}
+\vspace{0.5em}
+\umlfigurepair[0.44]{06-sequence-identify}{uml-seq-identify}{Sequence: device identify}{07-sequence-score}{uml-seq-score}{Sequence: transaction score}

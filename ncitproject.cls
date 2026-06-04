@@ -116,7 +116,10 @@
 \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
 \renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
 
-\pretocmd{\section}{\clearpage}{}{}
+% Final/mid-term: each section on a new page (guideline). Proposal: continuous flow (8--10 pages).
+\if@ncitproposal\else
+  \pretocmd{\section}{\clearpage}{}{}
+\fi
 
 % Heading sizes: stepwise above 12 pt body, below title (~14 pt cap)
 \makeatletter
@@ -149,39 +152,47 @@
   \end{figure}%
 }
 
-% \umlfigure{label}{basename}{caption} — auto-includes PDF/PNG/EPS or shows box
-\newcommand{\umlfigure}[3]{%
-  \begin{figure}[ht]
+% \umlfigure[scale]{label}{basename}{short caption}
+\newcommand{\uml@include}[2]{%
+  \IfFileExists{figures/uml/#1.pdf}{\includegraphics[#2]{figures/uml/#1}}{%
+    \IfFileExists{figures/uml/#1.png}{\includegraphics[#2]{figures/uml/#1}}{%
+      \fbox{\parbox[c][0.2\textheight][c]{0.9\linewidth}{\centering\small Missing #1}}}}%
+}
+\newcommand{\umlfigure}[4][0.92]{%
+  \begin{figure}[H]
     \centering
-    \IfFileExists{figures/uml/#2.pdf}{%
-      \includegraphics[width=\textwidth]{figures/uml/#2}%
-    }{%
-      \IfFileExists{figures/uml/#2.png}{%
-        \includegraphics[width=\textwidth]{figures/uml/#2}%
-      }{%
-        \IfFileExists{figures/uml/#2.eps}{%
-          \includegraphics[width=\textwidth]{figures/uml/#2}%
-        }{%
-          \fbox{%
-            \parbox[c][0.36\textwidth][c]{0.9\textwidth}{%
-              \centering\small
-              \textit{Missing file: \texttt{figures/uml/#2.(pdf|png|eps)}}%
-            }%
-          }%
-        }%
-      }%
-    }%
-    \caption{#3}%
-    \label{fig:#1}%
+    \uml@include{#2}{width=#1\linewidth}
+    \caption{#4}
+    \label{fig:#3}
+  \end{figure}%
+}
+% \umlfigurepair[scale]{fileL}{labelL}{capL}{fileR}{labelR}{capR}
+\newcommand{\umlfigurepair}[7][0.46]{%
+  \begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{#1\linewidth}
+      \centering
+      \uml@include{#2}{width=\linewidth}
+      \caption{#4}
+      \label{fig:#3}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{#1\linewidth}
+      \centering
+      \uml@include{#5}{width=\linewidth}
+      \caption{#7}
+      \label{fig:#6}
+    \end{subfigure}
   \end{figure}%
 }
 
 % ---------------------------------------------------------------------------
 % Figures, tables, equations (centred; captions; equation numbers right)
 % ---------------------------------------------------------------------------
+\RequirePackage{float}
 \RequirePackage{graphicx}
 \RequirePackage{amsmath,amssymb}
 \RequirePackage{caption}
+\RequirePackage{subcaption}
 \captionsetup{
   font=small,
   labelfont=bf,
@@ -269,7 +280,10 @@
     \centering
     \vspace*{1.5cm}
     {\large
-      A \textbf{\ncit@projectkind} Project \textbf{\ncit@reportstage} Report on\\[1.2em]
+      A \textbf{\ncit@projectkind} Project \textbf{\ncit@reportstage} Report on\\[0.5em]
+      \if@ncitproposal
+        {\normalsize (Initial submission --- proposal defense)}\\[0.8em]
+      \fi
       {\bfseries\large \ncit@title}\\[2em]
       Submitted in Partial Fulfillment of the Requirements for\\[0.6em]
       the Degree of \textbf{\ncit@degree}\\[0.4em]

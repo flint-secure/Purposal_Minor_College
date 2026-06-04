@@ -1,188 +1,236 @@
 \section{Problem Statement}
 
-Nepal's digital payment landscape has grown rapidly. Mobile wallets (eSewa, Khalti, IME Digital)
-now serve millions of users, yet most payment service providers (PSPs) still rely on rule-based
-fraud checks---simple amount or frequency thresholds that cannot adapt to evolving attacks
-such as SIM swap, credential stuffing, device emulation, and money mule networks.
+Over the past five years, Nepal's digital payment ecosystem has grown rapidly. Mobile wallets
+such as eSewa, Khalti, and IME Digital now serve millions of users, and the Nepal Rastra Bank
+reports more than ten million registered mobile-banking users (2024). This growth expands
+the attack surface for financial fraud while most payment service providers (PSPs) still rely
+on simple rule engines---thresholds on amount or frequency---that cannot detect coordinated
+attacks.
 
-The fundamental problem is the absence of real-time, device-level fraud intelligence in
-Nepal's fintech stack. Current systems share three critical limitations:
-\begin{itemize}
-  \item Rule-based systems cannot adapt without manual reconfiguration.
-  \item No device identity layer exists---transactions cannot be tied to physical devices,
-        blocking detection of one-device-many-accounts patterns.
-  \item Behavioral profiling is absent---there is no per-user baseline for anomalous amounts,
-        times, or recipients.
-\end{itemize}
+Three gaps define the problem for this project:
+\begin{enumerate}
+  \item \textbf{No adaptive detection.} Rule sets must be changed manually and cannot learn
+        from new fraud patterns such as SIM swap, credential stuffing, or device emulation.
+  \item \textbf{No device intelligence.} Transactions are not linked to a stable physical
+        device identity, so one-device--many-account (money mule) behaviour is invisible.
+  \item \textbf{No behavioural baseline.} Systems do not maintain per-user profiles for
+        amount, time-of-day, or recipient patterns, so anomalies are missed until losses occur.
+\end{enumerate}
 
-The consequence is high false negative rates (fraud undetected) and, where systems are
-overly conservative, high false positive rates (legitimate users blocked), harming both
-security and revenue.
+Nepal's FATF grey-list placement and FIU-Nepal's report of a 70\% year-on-year rise in SIM
+swap fraud (2024) show that existing controls are insufficient. The result is high false
+negatives (fraud undetected) and, when rules are tightened blindly, high false positives that
+block legitimate customers and reduce PSP revenue.
 
 \section{Project Objectives}
 
-The primary objective is to design, implement, and validate a production-grade fraud
-detection platform for Nepal's digital payment ecosystem. Specific objectives are:
+The primary objective is to \textbf{design, implement, and validate} Flint Secure as a
+production-oriented fraud platform for Nepali PSPs. The following specific objectives will
+guide the semester work:
 \begin{enumerate}
-  \item Implement a device identity layer using multi-signal fingerprinting with
-        drift-tolerant fuzzy matching across browser and OS updates.
-  \item Design a composite risk scoring engine with seven independent dimensions and
-        weights calibrated to Nepal-specific fraud patterns.
-  \item Achieve P95 API latency under 50\,ms at $\approx$3,200 concurrent requests per second
-        on commodity cloud infrastructure.
-  \item Implement SIM swap detection via phone-to-device binding (first-write-wins) addressing
-        the primary domestic account-takeover vector.
-  \item Build an async worker pipeline for behavioral profiling, device trust, and recipient
-        risk aggregation decoupled from the hot request path.
-  \item Validate the system with a 168-test automated suite achieving $\geq$92\% pass rate.
+  \item Develop a \textbf{device identity layer} using multi-signal fingerprinting and
+        drift-tolerant fuzzy matching so devices remain recognisable after browser or OS updates.
+  \item Build a \textbf{composite risk engine} with seven weighted signal dimensions calibrated
+        using Nepal-specific fraud indicators (including SIM swap prevalence).
+  \item Meet a \textbf{performance target} of P95 latency below 50\,ms and sustained throughput
+        of at least 3,200 scoring requests per second on commodity cloud hardware.
+  \item Implement \textbf{SIM swap detection} through hashed phone-to-device binding with
+        first-write-wins semantics and hard-floor blocking rules.
+  \item Deliver an \textbf{asynchronous analytics pipeline} (NATS + Python workers) for user
+        profiling, device trust, and recipient risk without blocking the scoring path.
+  \item Prove correctness via a \textbf{168-test automated suite} with pass rate of at least 92\%.
 \end{enumerate}
 
 \section{Significance of the Study}
 
-Flint Secure addresses a gap in developing-market fintech: commercial solutions (Stripe Radar,
-Sift, Sardine) are priced for Western markets and lack Nepal-specific calibration. The project
-demonstrates that sub-50\,ms latency, multi-dimensional scoring, device intelligence, and SIM
-swap detection are achievable with open-source components (Go, Redis, NATS, PostgreSQL) on
-Oracle Cloud Free Tier ARM64 infrastructure.
+Commercial platforms (Stripe Radar, Sift, Sardine) are built for Western transaction volumes
+and pricing models that are out of reach for typical Nepali PSPs. They also lack calibration
+for domestic vectors such as SIM swap-heavy account takeover. Flint Secure is significant
+because it proposes \textbf{affordable, locally relevant} fraud infrastructure using open
+components (Go, Redis, NATS, PostgreSQL) deployable on Oracle Cloud Free Tier ARM64.
 
-As open fintech infrastructure, Flint Secure supports Nepal's digital financial inclusion
-agenda and reduces dependency on foreign fraud platforms that are economically inaccessible
-to local PSPs.
-
-% Scope and future work: see archive/ (mid-term and final reports)
+For the college and university, the project will aim to show that minor-project outcomes can
+meet industry-style non-functional targets (latency, throughput, security middleware) while
+remaining reproducible by a small student team. For the national context, it will support
+digital financial inclusion and reduces reliance on foreign fraud services that are neither
+priced nor tuned for Nepal.
 
 \section{Literature Study/Review}
 
 \subsection{Device Fingerprinting}
-Eckersley (2010) established that browser fingerprints are highly unique in large samples;
-Laperdrix et al.\ (2016) showed canvas rendering differences across GPU hardware---informing
-our canvas hash signal. Vastel et al.\ (2018) on fingerprint evolution motivated our
-three-layer cascade: exact hash, stored ID recovery, and fuzzy matching with evolution
-penalties.
+Eckersley (2010) showed that browser fingerprints are highly unique in large samples, forming
+the empirical basis for passive device identification. Laperdrix et al.\ (2016) demonstrated
+that canvas rendering traces GPU hardware and informs our Tier-1 canvas hash. Vastel et al.\
+(2018) tracked fingerprint evolution over time; their work supports our proposed three-layer
+cascade: exact hash match, stored-ID recovery after drift, and fuzzy similarity with
+evolution penalties.
 
-\subsection{Real-Time Fraud Detection}
-West and Bhattacharya (2016) survey ML for financial fraud; Fiore et al.\ (2019) address
-class imbalance via GAN augmentation. Dal Pozzolo et al.\ (2015) inform ALLOW/FLAG/BLOCK
-threshold calibration.
+\subsection{Real-Time Fraud Detection and Scoring}
+West and Bhattacharya (2016) review machine-learning approaches to payment fraud; ensemble
+methods consistently outperform single models. Fiore et al.\ (2019) address severe class
+imbalance via synthetic fraud samples---relevant for early deployment when labels are scarce.
+Dal Pozzolo et al.\ (2015) provide a framework for probability calibration that informs our
+planned ALLOW/FLAG/BLOCK thresholds. For the initial release we propose transparent rule-based
+scoring; ML integration is deferred to future work (see \texttt{archive/future-work.tex}).
 
-\subsection{Velocity and SIM Swap}
-Bolton and Hand (2002) establish velocity features as highly predictive; our Redis sorted-set
-counters implement multi-window velocity in one pipelined round-trip. Mjaaland et al.\ (2021)
-document SIM swap in mobile banking; FIU-Nepal (2024) reports a 70\% YoY increase in Nepal,
-justifying elevated identity-risk weighting.
+\subsection{Velocity Analysis and SIM Swap}
+Bolton and Hand (2002) identify velocity features (frequency, amount variance, recipient
+diversity) as among the strongest real-time predictors. Our design maps these to Redis sorted-set
+counters queried in one pipelined round-trip. Mjaaland et al.\ (2021) document SIM swap in
+mobile banking; FIU-Nepal (2024) confirms rapid growth in Nepal, justifying a high identity-risk
+weight in the proposed scoring model.
 
-\subsection{Related Systems}
-Stripe Radar, Sift, and Sardine provide enterprise-scale scoring but lack Nepal-specific
-tuning and are cost-prohibitive at local PSP scale. Flint Secure differentiates through
-geographic calibration (e.g.\ identity weight $\times$16 reflecting SIM swap prevalence).
+\subsection{Comparison with Existing Products}
+Stripe Radar, Sift, and Sardine offer mature cloud scoring but at per-event costs unsuitable
+for many domestic PSPs and without Nepal-specific weighting. Flint Secure is positioned as
+\textbf{open, self-hostable infrastructure} with explicit calibration for local fraud data.
 
 \section{Proposed Methodology}
 
-\subsection{System Architecture}
-Flint Secure uses strict separation between request serving, business logic, and storage to
-meet a 200\,ms P95 budget (targeting $<$50\,ms achieved in testing). Each request passes
-middleware: request ID, GeoIP (MaxMind), API key auth (Redis cache $\rightarrow$ PostgreSQL),
-rate limiting, and optional HMAC-SHA256 signing with replay prevention.
+\subsection{Overview and Architecture}
+Flint Secure will follow a layered architecture: HTTP middleware and handlers (request path),
+pure business logic (scoring engine), and asynchronous persistence (NATS workers to
+PostgreSQL). The scoring path will prefetch all signals from Redis, call a pure
+\texttt{scoring.Score()} function with no I/O, return the decision, then publish events and
+velocity updates in background goroutines. This separation is proposed to satisfy the
+sub-50\,ms latency objective.
 
-The \texttt{/v1/score} handler pipelines Redis reads (device, profile, velocity), computes
-identity/SIM swap signals, checks quota, then invokes a pure scoring function (no I/O).
-Responses are sent immediately; NATS events and velocity writes run asynchronously.
+\subsection{Middleware and Security}
+Each request will pass through: request-ID assignment, client IP extraction, GeoIP enrichment
+(MaxMind GeoLite2), API-key authentication (Redis cache with PostgreSQL fallback), tiered rate
+limiting (per IP, key, and device), and optional HMAC-SHA256 signing with Redis-backed replay
+protection ($\pm$5 minute timestamp window).
 
-\subsection{Storage}
+\subsection{Storage Design}
 \begin{itemize}
-  \item \textbf{Redis Persist:} devices, profiles, phone bindings, quotas (AOF, 90-day TTL).
-  \item \textbf{Redis Cache:} velocity ZSETs, rate limits, API key cache (no persistence).
-  \item \textbf{PostgreSQL:} history and admin data (async via workers only).
-  \item \textbf{NATS JetStream:} \texttt{transactions.scored}, \texttt{device.first\_seen}.
+  \item \textbf{Redis Persist} --- device records, user profiles, phone bindings, monthly quotas
+        (AOF enabled; 90-day device TTL).
+  \item \textbf{Redis Cache} --- velocity sorted sets, rate-limit counters, API-key cache (no
+        persistence; optimised for throughput).
+  \item \textbf{PostgreSQL} --- transactions, alerts, clients, API-key hashes (writes only via
+        workers, not on the hot path).
+  \item \textbf{NATS JetStream} --- subjects \texttt{device.first\_seen} and
+        \texttt{transactions.scored} linking Go producers to Python consumers.
 \end{itemize}
 
-\subsection{Device Identification}
-Three-layer cascade on \texttt{/v1/identify}: (1)~exact \texttt{local\_fp} hash match
-($\sim$85\% of traffic); (2)~stored device ID recovery after fingerprint drift;
-(3)~fuzzy similarity over 14 tiered signals with block-key pre-filtering (screen, OS family).
+\subsection{Device Identification (\texttt{/v1/identify})}
+The SDK will hash collected signals client-side (\texttt{local\_fp}). The server will apply:
+\textbf{Layer~1} exact Redis lookup (expected $\sim$85\% of calls); \textbf{Layer~2} recovery via
+stored device ID when fingerprints drift; \textbf{Layer~3} fuzzy match over 14 tiered signals
+within a block-key bucket (screen size and OS family). New devices will be enrolled and indexed
+for later matches.
 
-\subsection{Risk Scoring}
-Seven components (device, amount, time, velocity, network, identity, recipient) with
-interaction terms (e.g.\ new device $\times$ large amount) and hard-floor overrides (SIM swap,
-datacenter IP, automation signals). Identity uses SHA-256 phone hash with first-write-wins
-binding.
+\subsection{Risk Scoring (\texttt{/v1/score})}
+Seven components---device, amount, time, velocity, network, identity, recipient---will be
+weighted and combined with interaction terms (e.g.\ new device $\times$ large amount).
+Hard-floor rules will force BLOCK for definitive signals (SIM swap mismatch, datacenter IP,
+impossible device consistency). Phone numbers will be stored only as SHA-256 hashes with
+first-write-wins device binding.
 
-\subsection{Async Workers}
-Python workers: device indexer, transaction indexer, user profile builder (percentiles,
-active hours), device trust, recipient risk, and config cache---keeping analytics off the
-latency-critical path.
+\subsection{Async Worker Pipeline}
+Python workers will consume NATS events to: index devices and transactions in PostgreSQL;
+build user amount percentiles and active-hour profiles; update device trust scores; aggregate
+recipient risk from prior BLOCK decisions; refresh client configuration caches in Redis.
 
-\subsection{Technology Stack}
-Go (chi router), two Redis instances, NATS, PostgreSQL, Python workers; SDKs for JS/Android/iOS;
-k6 load testing; deployment on Oracle Cloud ARM64.
+\subsection{Technology Stack and SDKs}
+Go (chi router), dual Redis, NATS, PostgreSQL, Python~3 workers; JavaScript, Android, and iOS
+SDKs for signal collection; k6 for load testing; deployment target Oracle Cloud ARM64 (4 OCPU
+instance in the validation plan).
 
 \input{sections/uml-figures}
 
 \section{Proposed Performance Analysis Methodology and Validation Scheme}
 
-Validation combines load testing, component tests, and acceptance criteria aligned with
-objectives:
+Validation will be \textbf{planned and repeatable}, not anecdotal. Table~\ref{tab:perf} lists
+metrics, methods, and acceptance thresholds tied to Objectives~3 and~6.
+
 \begin{table}[ht]
   \centering
-  \caption{Performance targets and validation methods}
+  \caption{Proposed performance and quality validation}
+  \label{tab:perf}
+  \small
   \begin{tabularx}{\textwidth}{@{}lXcc@{}}
     \toprule
-    \textbf{Metric} & \textbf{Method} & \textbf{Target} & \textbf{Tool} \\
+    \textbf{Metric} & \textbf{Procedure} & \textbf{Target} & \textbf{Tool} \\
     \midrule
-    P95 \texttt{/score} latency & Sustained k6 load & $<$50\,ms & k6 \\
-    Throughput & Concurrent clients & $\geq$3,200 req/s & k6 \\
-    P95 \texttt{/identify} L1/L3 & Layer-isolated tests & $<$500\,ms & Test suite \\
-    Error rate under load & 5xx monitoring & $<$0.1\% & k6 + logs \\
-    Functional correctness & 168 automated tests & $\geq$92\% pass & Go/Python tests \\
-    SIM swap detection & Controlled binding tests & 100\% floor trigger & Unit tests \\
+    P95 \texttt{/score} latency & 10-min sustained load, co-located Redis & $<$50\,ms & k6 \\
+    Sustained throughput & Ramp to peak RPS, watch error rate & $\geq$3,200 req/s & k6 \\
+    P95 \texttt{/identify} (L1/L3) & Isolated layer tests & $<$500\,ms & Go tests \\
+    HTTP 5xx under load & Monitor server logs & $<$0.1\% & k6 + logs \\
+    Functional coverage & 168 automated cases & $\geq$92\% pass & Go/Python \\
+    SIM swap floor & Inject phone rebinding & BLOCK triggered & Unit tests \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
-Scoring weights will be validated against FIU-Nepal fraud vectors, NRB payment statistics,
-and labeled pilot data (2,400 cases, Q3--Q4 2024). Latency breakdowns (Redis pipeline vs.\
-scoring CPU) will be profiled to confirm the pure-function engine design.
+\textbf{Weight calibration} will use three inputs: FIU-Nepal fraud-vector statistics (SIM swap
+share), Nepal Rastra Bank payment-distribution data (amount and hour), and 2,400 labelled
+pilot transactions (Q3--Q4 2024) supplied by a domestic PSP partner. Latency profiling will
+separate Redis pipeline time from scoring CPU time to confirm the pure-function design.
+
+\textbf{Defense readiness} will include a 10-minute presentation, a supervisor meeting log
+(per college Appendix~B), and a live or recorded demo showing \texttt{ALLOW}, \texttt{FLAG},
+and \texttt{BLOCK} decisions on sample transactions.
 
 \section{Proposed Deliverable/Output}
 
+\subsection{At proposal defense (this document)}
+\begin{itemize}
+  \item This initial proposal report (8--10 pages, NCIT format).
+  \item UML~2.0 models: use case, component, and sequence diagrams (PlantUML source in repository).
+  \item Ten-minute proposal presentation and supervisor meeting log (Appendix~B, college guideline).
+\end{itemize}
+
+\subsection{Planned by end of semester}
 \begin{table}[ht]
   \centering
-  \caption{Major deliverables}
-  \begin{tabularx}{\textwidth}{@{}lXr@{}}
+  \caption{Planned outputs after proposal approval (not yet built)}
+  \label{tab:deliverables}
+  \small
+  \begin{tabularx}{\textwidth}{@{}lXl@{}}
     \toprule
-    \textbf{Deliverable} & \textbf{Description} & \textbf{Phase} \\
+    \textbf{No.} & \textbf{Output} & \textbf{Target} \\
     \midrule
-    REST APIs & \texttt{/v1/identify}, \texttt{/v1/score} with auth and signing & Wk 6 \\
-    Device SDKs & JavaScript, Android, iOS signal collectors & Wk 8 \\
-    Scoring engine & Seven-component rules + interaction terms & Wk 9 \\
-    Worker pipeline & NATS consumers for profile, trust, risk & Wk 10 \\
-    Data stores & Redis schemas, PostgreSQL migrations & Wk 7 \\
-    Test suite & 168 tests (identify, score, auth, quota) & Wk 12 \\
-    Documentation & API reference, deployment guide, proposal/report & Wk 14 \\
+    D1 & Go REST API (\texttt{/v1/identify}, \texttt{/v1/score}) & Week~8 \\
+    D2 & JavaScript, Android, iOS SDKs & Week~9 \\
+    D3 & Redis schemas + PostgreSQL migrations & Week~7 \\
+    D4 & NATS worker pipeline (6 consumers) & Week~10 \\
+    D5 & 168-test suite + k6 load scripts & Week~12 \\
+    D6 & API \& deployment documentation & Week~13 \\
+    D7 & Mid-term and final reports + demo & Defenses \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
 \section{Project Task and Time Schedule}
 
+This schedule begins at \textbf{proposal defense} (start of semester). Mid-term and final
+defenses follow NCIT timing: at least four weeks after proposal, and at least four weeks
+after mid-term, respectively.
+
 \begin{table}[ht]
   \centering
-  \caption{Semester task schedule (14 weeks)}
-  \begin{tabularx}{\textwidth}{@{}clrX@{}}
+  \caption{Project task and time schedule (14-week semester)}
+  \label{tab:schedule}
+  \small
+  \begin{tabularx}{\textwidth}{@{}clXl@{}}
     \toprule
-    \textbf{Wk} & \textbf{Phase} & \textbf{Duration} & \textbf{Activities} \\
+    \textbf{Wk} & \textbf{Milestone} & \textbf{Tasks} & \textbf{Output} \\
     \midrule
-    1--2 & Planning & 2 wks & Requirements, architecture, literature finalization \\
-    3--4 & Foundation & 2 wks & Go project skeleton, Redis/Postgres, middleware chain \\
-    5--6 & Identify API & 2 wks & Fingerprint cascade, block keys, SDK integration \\
-    7--8 & Score API & 2 wks & Velocity, scoring engine, SIM swap, quota \\
-    9--10 & Async layer & 2 wks & NATS, Python workers, profile/trust builders \\
-    11--12 & Validation & 2 wks & k6 load tests, 168-test suite, bug fixes \\
-    13--14 & Defense prep & 2 wks & Proposal/mid-term/final report, demo, slides \\
+    1 & \textbf{Proposal defense} & Submit this proposal, UML, presentation; supervisor log & This report \\
+    2--3 & Foundation & Repo setup, middleware, Redis/Postgres, CI & D3 \\
+    4--5 & Identify API & Fingerprint cascade, block keys, SDK alpha & D1, D2 \\
+    6--7 & Score API & Velocity, scoring engine, SIM swap, quota & D1 \\
+    8 & \textbf{Mid-term defense} & Design review, progress demo, supervisor log & Mid-term report \\
+    9--10 & Async layer & NATS subjects, Python workers, profiling & D4 \\
+    11--12 & Validation & k6 runs, 168 tests, bug fixes, tuning & D5 \\
+    13--14 & \textbf{Final defense} & Final report, demo, documentation, presentation & D6, D7 \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
+% Keep floats (UML figures) above references — do not let them drift past bibliography
+\clearpage
 \section{Bibliography/References}
 
 \begin{thebibliography}{99}
@@ -195,26 +243,26 @@ R.~J. Bolton and D.~J. Hand,
 \bibitem{dalpozzolo2015}
 A.~Dal Pozzolo, O.~Caelen, R.~A. Johnson, and G.~Bontempi,
 \newblock Calibrating probability with undersampling for unbalanced classification,
-\newblock \emph{IEEE Symposium Series on Computational Intelligence}, 2015.
+\newblock \emph{2015 IEEE Symposium Series on Computational Intelligence}, 2015.
 
 \bibitem{eckersley2010}
 P.~Eckersley,
 \newblock How unique is your web browser?
-\newblock \emph{Privacy Enhancing Technologies Symposium (PETS)}, 2010.
+\newblock \emph{Privacy Enhancing Technologies Symposium (PETS 2010)}, EFF, 2010.
 
 \bibitem{fiore2019}
-U.~Fiore et al.,
-\newblock Using generative adversarial networks for improving classification effectiveness in credit card fraud detection,
+U.~Fiore, A.~De Santis, F.~Perla, P.~Zanetti, and F.~Palmieri,
+\newblock GAN-based augmentation for credit-card fraud detection,
 \newblock \emph{Information Sciences}, 479:448--455, 2019.
 
 \bibitem{fiu2024}
-Financial Intelligence Unit Nepal (FIU-Nepal),
+Financial Intelligence Unit Nepal,
 \newblock \emph{Annual Report 2023/24},
-\newblock Nepal Rastra Bank, 2024.
+\newblock Nepal Rastra Bank, Kathmandu, 2024.
 
 \bibitem{laperdrix2016}
 P.~Laperdrix, W.~Rudametkin, and B.~Baudry,
-\newblock Beauty and the beast: Diverting modern web browsers to build unique browser fingerprints,
+\newblock Beauty and the beast: Diverting modern web browsers to build unique fingerprints,
 \newblock \emph{IEEE Symposium on Security and Privacy}, 2016.
 
 \bibitem{mjaaland2021}
@@ -223,7 +271,7 @@ B.~B. Mjaaland, J.~Heeger, and S.~D. Wolthusen,
 \newblock \emph{IEEE CSR}, 2021.
 
 \bibitem{vastel2018}
-A.~Vastel et al.,
+A.~Vastel, P.~Laperdrix, W.~Rudametkin, and R.~Rouvoy,
 \newblock FP-STALKER: Tracking browser fingerprint evolutions,
 \newblock \emph{IEEE Symposium on Security and Privacy}, 2018.
 
