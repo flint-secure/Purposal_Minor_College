@@ -1,9 +1,8 @@
 @startuml 01-use-case
-' UML 2.0 use case diagram — three primary actors
-' https://www.geeksforgeeks.org/system-design/use-case-diagram/
+' Simplified use case diagram — three actors, core flows only
 left to right direction
 skinparam shadowing false
-skinparam defaultFontSize 10
+skinparam defaultFontSize 11
 skinparam actorStyle stickman
 skinparam usecase {
   BackgroundColor #FEFECE
@@ -21,50 +20,17 @@ PSP -[hidden]down- SDK
 SDK -[hidden]down- FA
 
 rectangle "Flint Secure" <<system>> {
-
   (Identify Device) as UC1
   (Score Transaction) as UC2
-  (Review Alerts) as UC3
-  (Identity Graph Lookup) as UC6
-  (Check API Quota) as UC7
-
-  (Manage Integration) as UCM
-  (Manage API Keys) as UC4
-  (Onboard Client) as UC5
-  UCM <|-- UC4
-  UCM <|-- UC5
-
-  (Authenticate Request) as UC_AUTH
-  (Publish Event) as UC_PUB
-  (Update Velocity Counters) as UC_VEL
-  (Build User Profile) as UC_PROF
-
-  UC1 ..> UC_AUTH : <<include>>
-  UC2 ..> UC_AUTH : <<include>>
-  UC1 ..> UC_PUB : <<include>>
-  UC2 ..> UC_PUB : <<include>>
-  UC2 ..> UC_VEL : <<include>>
-  UC_PUB ..> UC_PROF : <<include>>
-
-  (Verify HMAC Signature) as UC_HMAC
-  (SIM Swap Check) as UC_SIM
-  (Report Fraud Label) as UC_FRAUD
-
-  UC_HMAC ..> UC2 : <<extend>>
-  UC_SIM ..> UC2 : <<extend>>
-  UC3 ..> UC2 : <<extend>>
-  UC_FRAUD ..> UC3 : <<extend>>
+  (Manage API Keys) as UC3
+  (Review Fraud Alerts) as UC4
 }
 
 PSP --> UC1
 PSP --> UC2
-PSP --> UC4
-PSP --> UC5
-PSP --> UC7
+PSP --> UC3
 SDK --> UC1
 SDK --> UC2
-FA --> UC3
-FA --> UC6
-FA --> UC_FRAUD
+FA --> UC4
 
 @enduml
