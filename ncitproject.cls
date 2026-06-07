@@ -157,6 +157,7 @@
 \RequirePackage{amsmath,amssymb}
 \RequirePackage{caption}
 \RequirePackage{subcaption}
+\RequirePackage{pdflscape}
 
 % ---------------------------------------------------------------------------
 % UML diagrams — inline (non-floating) so they never move below References
@@ -166,16 +167,18 @@
     \includegraphics[#2,keepaspectratio]{figures/uml/#1}}{%
     \IfFileExists{figures/uml/#1.png}{%
       \includegraphics[#2,keepaspectratio]{figures/uml/#1}}{%
-      \fbox{\parbox[c][0.12\textheight][c]{0.9\linewidth}{\centering\small Missing #1}}}}%
+      \IfFileExists{figures/uml/#1.jpg}{%
+        \includegraphics[#2,keepaspectratio]{figures/uml/#1}}{%
+        \fbox{\parbox[c][0.12\textheight][c]{0.9\linewidth}{\centering\small Missing #1}}}}}%
 }
 % \umlfigure[width factor]{label}{basename}{caption}
 \newcommand{\umlfigure}[4][1.0]{%
   \par\vspace{0.2em}%
   \begin{center}%
     \if@ncitproposal
-      \uml@include{#3}{width=#1\linewidth,height=0.28\textheight}%
+      \uml@include{#3}{width=#1\linewidth,height=0.75\textheight}%
     \else
-      \uml@include{#3}{width=#1\linewidth,height=0.15\textheight}%
+      \uml@include{#3}{width=#1\linewidth,height=0.60\textheight}%
     \fi
   \end{center}%
   \vspace{0.1em}%
