@@ -143,17 +143,7 @@
 \pgfmathsetmacro{\xFG}{\LW + 4.5*\SW + 0.20}
 \draw[dep] (\xFG, \rF-\hS) -- (\xFG, \rG+\hS);
 
-% ============================================================
-% Milestones  (◆ diamond markers)
-% ============================================================
-\pgfmathsetmacro{\msA}{\LW + 1*\SW}
-\node[milestone] at (\msA, 0.45) {};
 
-\pgfmathsetmacro{\msB}{\LW + 3*\SW}
-\node[milestone] at (\msB, 0.45) {};
-
-\pgfmathsetmacro{\msC}{\LW + 6*\SW}
-\node[milestone] at (\msC, 0.45) {};
 
 % ============================================================
 % Outer frame
@@ -182,9 +172,6 @@
   \node[font=\fontsize{5}{6}\selectfont, anchor=west] at (\lx+0.35, \legY) {\t};
 }
 
-% Milestone legend entry
-\pgfmathsetmacro{\mlx}{\legX + 1.0 + 6*1.45}
-\node[milestone, inner sep=1pt] at (\mlx+0.07, \legY) {};
-\node[font=\fontsize{5}{6}\selectfont, anchor=west] at (\mlx+0.25, \legY) {Defense};
+
 
 \end{tikzpicture}
