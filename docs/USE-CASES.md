@@ -84,12 +84,13 @@ Tense: **will** / **planned** (see [WRITING-GUIDE.md](WRITING-GUIDE.md)).
 | Diagram | File | Planned coverage |
 |---------|------|------------------|
 | Use case | `01-use-case.puml` | UC-01–UC-05 (core) |
-| Component | `03-component.puml` | API + workers |
-| Sequence identify | `06-sequence-identify.puml` | UC-01 |
-| Sequence score | `07-sequence-score.puml` | UC-02 |
-| Deployment | `04-deployment.puml` | Planned Docker/cloud layout |
-| Class domain | `05-class-domain.puml` | Planned entities |
-| Activity scoring | `08-activity-scoring.puml` | UC-02 branches |
+| Activity scoring | `02-activity-scoring.puml` | UC-02 branches |
+| Class domain | `03-class-domain.puml` | Planned entities |
+| Sequence identify | `04-sequence-identify.puml` | UC-01 |
+| Sequence score | `05-sequence-score.puml` | UC-02 |
+| Component | `06-component.puml` | API + workers |
+| Deployment | `07-deployment.puml` | Planned Docker/cloud layout |
+| Package context | `08-package-context.puml` | System context / logical grouping |
 
 ## Out of scope for initial proposal
 

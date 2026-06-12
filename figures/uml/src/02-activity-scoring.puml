@@ -1,5 +1,9 @@
-@startuml 08-activity-scoring
-title Risk Scoring — Activity Diagram
+@startuml 02-activity-scoring
+' UML 2.0 — Behavior: Activity Diagram
+skinparam shadowing false
+skinparam defaultFontSize 11
+
+title Flint Secure — Activity Diagram (Risk Scoring)
 
 start
 :Fetch device, profile,\nvelocity from Redis;
@@ -8,7 +12,7 @@ if (Quota exceeded?) then (yes)
   :Return BLOCK;
   stop
 endif
-partition "scoring.Score() pure function" {
+partition "scoring.Score() <<pure function>>" {
   :Compute 7 risk components;
   :Apply interaction terms;
   if (Hard floor triggered?) then (yes)

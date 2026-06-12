@@ -1,0 +1,44 @@
+@startuml 08-package-context
+' UML 2.0 — Structure: Package Diagram (system context)
+skinparam shadowing false
+skinparam defaultFontSize 11
+skinparam rectangle {
+  BackgroundColor #F8F8F8
+}
+
+title Flint Secure — Package Diagram (System Context)
+
+actor "PSP Backend" as PSP
+actor "SDK (JS / Android / iOS)" as SDK
+
+package "External Services" {
+  component "MaxMind GeoIP" as GeoIP <<external>>
+}
+
+package "Flint Secure" {
+  package "API Layer" {
+    component [Go REST API] as API
+  }
+  package "Persistence" {
+    database "Redis Persist" as R1
+    database "Redis Cache" as R2
+    database "PostgreSQL" as PG
+  }
+  package "Messaging" {
+    queue "NATS JetStream" as NATS
+  }
+  package "Workers" {
+    component [Go Worker Pipeline] as W
+  }
+}
+
+PSP --> API : HTTPS
+SDK --> API : HTTPS
+API --> R1
+API --> R2
+API --> GeoIP
+API --> NATS : publish
+W --> NATS : consume
+W --> PG
+
+@enduml

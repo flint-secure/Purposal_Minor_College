@@ -1,0 +1,105 @@
+% TikZ UML use case diagram — monochrome, compact text
+\newcommand{\flintdrawactor}[3]{%
+  \begin{scope}[shift={(#1,#2)}]
+    \draw[line width=0.5pt] (0,0.5) circle (0.15);
+    \draw[line width=0.5pt] (0,0.35) -- (0,0.02);
+    \draw[line width=0.5pt] (-0.24,0.16) -- (0.24,0.16);
+    \draw[line width=0.5pt] (0,0.02) -- (-0.15,-0.36);
+    \draw[line width=0.5pt] (0,0.02) -- (0.15,-0.36);
+    \node[below, align=center, font=\tiny, text width=2.1cm] at (0,-0.48) {#3};
+  \end{scope}%
+}
+
+\begin{tikzpicture}[
+  font=\scriptsize,
+  ucase/.style={
+    ellipse,
+    draw=black,
+    line width=0.45pt,
+    fill=white,
+    inner xsep=3pt,
+    inner ysep=1.5pt,
+    align=center,
+    font=\tiny
+  },
+  assoc/.style={-Stealth, line width=0.45pt},
+  umldep/.style={
+    -Stealth,
+    dashed,
+    line width=0.4pt,
+    font=\fontsize{5}{6}\selectfont,
+    fill=white,
+    inner sep=0.5pt
+  }
+]
+
+% Left actors
+\flintdrawactor{-8.0}{5.2}{End User Device (SDK)};
+\flintdrawactor{-8.0}{1.2}{Merchant Developer};
+\flintdrawactor{-8.0}{-3.2}{PSP Backend};
+
+% Right actor
+\flintdrawactor{8.0}{2.4}{Fraud / Risk Analyst};
+
+% Primary use cases
+\node[ucase] (ident)  at (-1.0, 5.4) {Identify devices};
+\node[ucase] (keys)   at (-1.0, 1.4) {Manage API Keys};
+\node[ucase] (review) at (-1.0, -1.4) {Review alerts};
+\node[ucase] (score)  at (-1.0, -5.4) {Score Transaction};
+
+% Included / extended use cases
+\node[ucase] (val)     at (3.0, 6.5) {Validate API key};
+\node[ucase] (match)   at (3.0, 5.3) {Match existing device};
+\node[ucase] (store)   at (3.0, 4.1) {Store device metadata};
+\node[ucase] (drift)   at (3.0, 2.9) {Recover device drift};
+
+\node[ucase] (create)  at (3.0, 1.9) {Create API key};
+\node[ucase] (list)    at (3.0, 1.3) {List API key};
+\node[ucase] (revoke)  at (3.0, 0.7) {Revoke API key};
+
+\node[ucase] (view)    at (3.0, -0.6) {View alert details};
+\node[ucase] (report)  at (3.0, -1.4) {Report fraud};
+\node[ucase] (inspect) at (3.0, -2.2) {Inspect identity risks};
+
+\node[ucase] (fetch)   at (3.0, -4.6) {Fetch Device Signals};
+\node[ucase] (calc)    at (3.0, -5.4) {Calculate Risk Score};
+\node[ucase] (publish) at (3.0, -6.2) {Publish scored event};
+\node[ucase] (block)   at (3.0, -7.0) {Flag / Block Transaction};
+
+% System boundary
+\node[
+  draw,
+  line width=0.55pt,
+  fill=none,
+  rounded corners=1pt,
+  inner sep=10pt,
+  fit=(ident)(keys)(review)(score)(val)(match)(store)(drift)(create)(list)(revoke)(view)(report)(inspect)(fetch)(calc)(publish)(block),
+  label={[font=\tiny]above:{Flint Secure <<system>>}}
+] (system) {};
+
+% Actor associations
+\draw[assoc] (-7.1, 4.72) -- (ident.west);
+\draw[assoc] (-7.1, 0.72) -- (ident.west);
+\draw[assoc] (-7.1, 0.72) -- (keys.west);
+\draw[assoc] (-7.1, -3.68) -- (score.west);
+\draw[assoc] (7.1, 1.92) -- (review.east);
+
+% Include relationships
+\draw[umldep] (ident.east) -- node[above, sloped] {<<include>>} (val.west);
+\draw[umldep] (ident.east) -- node[above, sloped] {<<include>>} (match.west);
+\draw[umldep] (ident.east) -- node[above, sloped] {<<include>>} (store.west);
+\draw[umldep] (keys.east) -- node[above, sloped] {<<include>>} (create.west);
+\draw[umldep] (keys.east) -- (list.west);
+\draw[umldep] (keys.east) -- node[below, sloped] {<<include>>} (revoke.west);
+\draw[umldep] (review.east) -- node[above, sloped] {<<include>>} (view.west);
+\draw[umldep] (score.east) -- node[above, sloped] {<<include>>} (fetch.west);
+\draw[umldep] (score.east) -- node[below, sloped] {<<include>>} (calc.west);
+
+% Extend relationships
+\draw[umldep] (drift.west) -- node[above, sloped] {<<extend>>} (ident.south east);
+\draw[umldep] (report.west) -- node[above, sloped] {<<extend>>} (review.south east);
+\draw[umldep] (inspect.west) -- node[below, sloped] {<<extend>>} (review.east);
+\draw[umldep] (publish.west) -- node[above, sloped] {<<extend>>} (score.south east);
+\draw[umldep] (block.west) -- node[below, sloped] {<<extend>>} (score.east);
+
+\end{tikzpicture}

@@ -1,9 +1,13 @@
-@startuml 07-sequence-score
+@startuml 05-sequence-score
+' UML 2.0 — Behavior: Interaction (Sequence Diagram)
 hide footbox
 skinparam shadowing false
 skinparam sequenceMessageAlign center
+skinparam defaultFontSize 11
 
-actor "PSP" as PSP
+title Flint Secure — Sequence Diagram (Transaction Scoring)
+
+actor "PSP Backend" as PSP
 participant "API Gateway" as API
 participant "Score Handler" as H
 database "Redis" as Redis

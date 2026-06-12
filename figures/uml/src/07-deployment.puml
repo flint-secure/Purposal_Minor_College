@@ -1,0 +1,45 @@
+@startuml 07-deployment
+' UML 2.0 — Structure: Deployment Diagram
+skinparam shadowing false
+skinparam defaultFontSize 11
+
+title Flint Secure — Deployment Diagram
+
+node "Oracle Cloud ARM64" <<execution environment>> {
+  node "App VM" <<device>> {
+    artifact "flint-api\n(Go binary)" as API <<executable>>
+    artifact "redis-persist :6379" as R1 <<file>>
+    artifact "redis-cache :6380" as R2 <<file>>
+    artifact "nats-jetstream" as NATS <<file>>
+  }
+}
+
+node "Database Host" <<execution environment>> {
+  database "PostgreSQL" as PG
+}
+
+node "PSP Data Center" <<execution environment>> {
+  component "PSP Backend" as PSP
+}
+
+node "User Devices" <<execution environment>> {
+  component "JS SDK" as JS
+  component "Android SDK" as AND
+  component "iOS SDK" as IOS
+}
+
+cloud "MaxMind" <<external>> {
+  artifact "GeoLite2 MMDB" as MMDB <<file>>
+}
+
+API --> R1 : TCP
+API --> R2 : TCP
+API --> NATS : TCP
+API --> MMDB : in-memory
+API --> PG : async via workers
+PSP --> API : HTTPS REST
+JS --> API : HTTPS
+AND --> API : HTTPS
+IOS --> API : HTTPS
+
+@enduml

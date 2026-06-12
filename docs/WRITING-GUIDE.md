@@ -14,7 +14,7 @@ This document is an **initial project proposal**: it describes what the team **p
 
 The LaTeX source (`sections/body.tex`, `proposal.tex`) already follows this rule. **Do not** copy past tense from `docs/` into the PDF without editing.
 
-**API path names** (`POST /v1/identify`, etc.) belong in `API-OVERVIEW.md` and the dev repo. The **proposal PDF** and its two UML figures (`01-use-case`, `07-sequence-score`) use plain-language labels only. Other PlantUML files in `figures/uml/src/` may keep technical paths for mid-term/final reports.
+**API path names** (`POST /v1/identify`, etc.) belong in `API-OVERVIEW.md` and the dev repo. The **proposal PDF** and its two UML figures (`01-use-case`, `05-sequence-score`) use plain-language labels only. Other PlantUML files in `figures/uml/src/` may keep technical paths for mid-term/final reports.
 
 **Sections omitted from the initial proposal** (stored in `../archive/`): Scope and Limitations, Further Works (`future-work.tex`). Add them for mid-term or final reports with `\input{archive/...}`.
 

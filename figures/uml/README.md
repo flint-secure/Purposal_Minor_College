@@ -2,18 +2,20 @@
 
 Diagrams are written in **PlantUML** (`.puml`) — text files you edit like code.
 
+Files are numbered in **UML 2.0 systematic order**: behavior diagrams first (requirements → processes → interactions), then structure diagrams (domain → architecture → deployment → context).
+
 ## Edit diagrams
 
-| Source file | Diagram |
-|-------------|---------|
-| `src/01-use-case.puml` | Use case (see `docs/USE-CASES.md` for UC-01…UC-12) |
-| `src/02-system-context.puml` | System context |
-| `src/03-component.puml` | Component |
-| `src/04-deployment.puml` | Deployment |
-| `src/05-class-domain.puml` | Class |
-| `src/06-sequence-identify.puml` | Sequence — identify |
-| `src/07-sequence-score.puml` | Sequence — score |
-| `src/08-activity-scoring.puml` | Activity — scoring |
+| # | Source file | UML 2.0 type | Diagram |
+|---|-------------|--------------|---------|
+| 01 | `src/01-use-case.puml` | Behavior — Use Case | PlantUML reference copy (optional). **Proposal PDF** uses TikZ: `figures/use-case-diagram.tex`. |
+| 02 | `src/02-activity-scoring.puml` | Behavior — Activity | Risk scoring workflow (UC-02 branches) |
+| 03 | `src/03-class-domain.puml` | Structure — Class | Core domain model |
+| 04 | `src/04-sequence-identify.puml` | Behavior — Interaction (Sequence) | Device identification flow (UC-01) |
+| 05 | `src/05-sequence-score.puml` | Behavior — Interaction (Sequence) | Transaction scoring flow (UC-02) |
+| 06 | `src/06-component.puml` | Structure — Component | Go API modules and workers |
+| 07 | `src/07-deployment.puml` | Structure — Deployment | Oracle Cloud / Docker layout |
+| 08 | `src/08-package-context.puml` | Structure — Package | System context (logical grouping) |
 
 ## Build
 
@@ -34,12 +36,12 @@ This installs PlantUML and Graphviz (`dot`) for layout. A Java-only fallback dow
 
 ```bash
 ./scripts/build-uml.sh
-open figures/uml/06-sequence-identify.pdf
+open figures/uml/04-sequence-identify.pdf
 ```
 
 ## Proposal vs mid-term wording
 
-Diagrams **`01-use-case`** and **`07-sequence-score`** (included in the initial proposal) use **plain-language** labels—no `/v1/...` paths. Other `.puml` files may keep technical endpoint names for later reports; canonical paths are in `docs/API-OVERVIEW.md`.
+Diagrams **`01-use-case`** and **`05-sequence-score`** (included in the initial proposal) use **plain-language** labels—no `/v1/...` paths. Other `.puml` files may keep technical endpoint names for later reports; canonical paths are in `docs/API-OVERVIEW.md`.
 
 ## LaTeX integration
 
@@ -49,7 +51,11 @@ The basename matches the `.puml` filename (without extension).
 ## PlantUML syntax reference
 
 - [plantuml.com](https://plantuml.com/guide)
-- Use case: `@startuml` + `actor`, `usecase`, `rectangle`
-- Sequence: `participant`, `->`, `alt` / `else` / `end`
-- Class: `class`, `enum`, `-->`
+- [uml-diagrams.org](https://www.uml-diagrams.org/) — UML 2.5 diagram taxonomy
+- Use case: `actor`, `usecase`, `rectangle <<system>>`
 - Activity: `start`, `if`, `partition`, `stop`
+- Class: `class`, `enum <<enumeration>>`, `-->`, `..>`
+- Sequence: `participant`, `->`, `alt` / `else` / `end`, `activate` / `deactivate`
+- Component: `component`, `package`, `database`, `queue`
+- Deployment: `node`, `artifact`, `cloud`
+- Package: `package`, nested packages, dependencies between packages

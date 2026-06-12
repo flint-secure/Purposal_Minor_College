@@ -1,24 +1,38 @@
-@startuml 06-sequence-identify
-title POST /v1/identify — Sequence Diagram
+@startuml 04-sequence-identify
+' UML 2.0 — Behavior: Interaction (Sequence Diagram)
+skinparam shadowing false
+skinparam defaultFontSize 11
 
-actor SDK
+title Flint Secure — Sequence Diagram (Device Identification)
+
+actor "Web SDK" as SDK
 participant "API Gateway" as API
 participant "IdentifyHandler" as H
 database "Redis" as Redis
 
 SDK -> API : POST /v1/identify\n(local_fp, signals, stored_device_id)
+activate API
 API -> H : authenticate + rate limit
+activate H
 H -> Redis : GET device:{client}:{local_fp}
+activate Redis
+
 alt Layer 1 — exact hash hit
   Redis --> H : StoredDevice
+  deactivate Redis
   H --> API : 200 device_id, confidence 0.95
 else Layer 2 — stored ID recovery
   H -> Redis : GET devid:{client}:{device_id}
   Redis --> H : StoredDevice
+  deactivate Redis
   H -> Redis : update fingerprint index
+  activate Redis
+  deactivate Redis
   H --> API : 200 confidence 0.90
 else Layer 3 — fuzzy match
+  deactivate Redis
   H -> Redis : SMEMBERS block key index
+  activate Redis
   loop each candidate
     H -> H : ComputeSimilarity()
   end
@@ -28,7 +42,11 @@ else Layer 3 — fuzzy match
     H -> Redis : SET new device + index
     H --> API : 201 new device_id
   end
+  deactivate Redis
 end
+
+deactivate H
 API --> SDK : JSON response
+deactivate API
 
 @enduml

@@ -1,5 +1,10 @@
-@startuml 05-class-domain
-title Flint Secure — Core Domain Classes
+@startuml 03-class-domain
+' UML 2.0 — Structure: Class Diagram
+skinparam shadowing false
+skinparam defaultFontSize 11
+skinparam classAttributeIconSize 0
+
+title Flint Secure — Class Diagram (Core Domain)
 
 class StoredDevice {
   +deviceID: string
@@ -24,7 +29,7 @@ class ScoreResult {
   +explanation: []string
 }
 
-enum Decision {
+enum Decision <<enumeration>> {
   ALLOW
   FLAG
   BLOCK
@@ -52,10 +57,11 @@ class RiskComponents {
   +recipient: float
 }
 
-ScoreRequest --> ScoreResult : scoring.Score()
+ScoreRequest ..> ScoreResult : <<create>>
 ScoreRequest --> StoredDevice : uses
 ScoreRequest --> VelocitySignals : uses
 ScoreRequest --> UserProfile : uses
-RiskComponents --> ScoreResult : aggregates
+RiskComponents ..> ScoreResult : aggregates
+ScoreResult --> Decision
 
 @enduml

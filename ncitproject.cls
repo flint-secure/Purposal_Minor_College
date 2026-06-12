@@ -154,6 +154,8 @@
 % Figures, tables, equations (centred; captions; equation numbers right)
 % ---------------------------------------------------------------------------
 \RequirePackage{graphicx}
+\RequirePackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.geometric}
 \RequirePackage{amsmath,amssymb}
 \RequirePackage{caption}
 \RequirePackage{subcaption}
@@ -170,6 +172,19 @@
       \IfFileExists{figures/uml/#1.jpg}{%
         \includegraphics[#2,keepaspectratio]{figures/uml/#1}}{%
         \fbox{\parbox[c][0.12\textheight][c]{0.9\linewidth}{\centering\small Missing #1}}}}}%
+}
+% \usecasefigure[width factor]{label}{caption} — TikZ vector use case diagram
+\newcommand{\usecasefigure}[3][0.95]{%
+  \par\vspace{0.2em}%
+  \begin{center}%
+    \resizebox{#1\linewidth}{!}{%
+      \input{figures/use-case-diagram.tex}%
+    }%
+  \end{center}%
+  \vspace{0.1em}%
+  \captionof{figure}{#3}%
+  \label{fig:#2}%
+  \par\vspace{0.2em}%
 }
 % \umlfigure[width factor]{label}{basename}{caption}
 \newcommand{\umlfigure}[4][1.0]{%

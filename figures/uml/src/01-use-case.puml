@@ -1,8 +1,8 @@
 @startuml 01-use-case
-' Simplified use case diagram — three actors, core flows only
-left to right direction
+' UML 2.0 — Behavior: Use Case Diagram (no ML — rule-based scope only)
+top to bottom direction
 skinparam shadowing false
-skinparam defaultFontSize 11
+skinparam defaultFontSize 10
 skinparam actorStyle stickman
 skinparam usecase {
   BackgroundColor #FEFECE
@@ -12,25 +12,89 @@ skinparam rectangle {
   BorderColor #333333
   BackgroundColor #FFFFFF
 }
-
-actor "PSP Backend" as PSP
-actor "Web SDK" as SDK
-actor "Fraud Analyst" as FA
-PSP -[hidden]down- SDK
-SDK -[hidden]down- FA
-
-rectangle "Flint Secure" <<system>> {
-  (Identify Device) as UC1
-  (Score Transaction) as UC2
-  (Manage API Keys) as UC3
-  (Review Fraud Alerts) as UC4
+skinparam arrow {
+  Color #333333
 }
 
-PSP --> UC1
-PSP --> UC2
-PSP --> UC3
-SDK --> UC1
-SDK --> UC2
-FA --> UC4
+title Flint Secure — Use Case Diagram
+
+actor "End User Device (SDK)" as SDK
+actor "Merchant Developer" as MD
+actor "PSP Backend" as PSP
+actor "Fraud / Risk Analyst" as FA
+
+SDK -[hidden]down- MD
+MD -[hidden]down- PSP
+SDK -[hidden]left- FA
+
+rectangle "Flint Secure" <<system>> {
+
+  usecase "Identify devices" as UC_IDENT
+  usecase "Validate API key" as UC_VAL
+  usecase "Match existing device" as UC_MATCH
+  usecase "Store device metadata" as UC_STORE
+  usecase "Recover device drift" as UC_DRIFT
+
+  UC_IDENT -[hidden]right- UC_VAL
+  UC_VAL -[hidden]down- UC_MATCH
+  UC_MATCH -[hidden]down- UC_STORE
+  UC_STORE -[hidden]down- UC_DRIFT
+
+  UC_IDENT ..> UC_VAL : <<include>>
+  UC_IDENT ..> UC_MATCH : <<include>>
+  UC_IDENT ..> UC_STORE : <<include>>
+  UC_DRIFT ..> UC_IDENT : <<extend>>
+
+  usecase "Manage API Keys" as UC_KEYS
+  usecase "Create API key" as UC_CREATE
+  usecase "List API key" as UC_LIST
+  usecase "Revoke API key" as UC_REVOKE
+
+  UC_IDENT -[hidden]down- UC_KEYS
+  UC_KEYS -[hidden]right- UC_CREATE
+  UC_CREATE -[hidden]down- UC_LIST
+  UC_LIST -[hidden]down- UC_REVOKE
+
+  UC_KEYS ..> UC_CREATE : <<include>>
+  UC_KEYS ..> UC_LIST : <<include>>
+  UC_KEYS ..> UC_REVOKE : <<include>>
+
+  usecase "Review alerts" as UC_REVIEW
+  usecase "View alert details" as UC_VIEW
+  usecase "Report fraud" as UC_REPORT
+  usecase "Inspect identity risks" as UC_INSPECT
+
+  UC_KEYS -[hidden]down- UC_REVIEW
+  UC_REVIEW -[hidden]right- UC_VIEW
+  UC_VIEW -[hidden]down- UC_REPORT
+  UC_REPORT -[hidden]down- UC_INSPECT
+
+  UC_REVIEW ..> UC_VIEW : <<include>>
+  UC_REPORT ..> UC_REVIEW : <<extend>>
+  UC_INSPECT ..> UC_REVIEW : <<extend>>
+
+  usecase "Score Transaction" as UC_SCORE
+  usecase "Fetch Device Signals" as UC_FETCH
+  usecase "Calculate Risk Score" as UC_CALC
+  usecase "Publish scored event" as UC_PUBLISH
+  usecase "Flag / Block Transaction" as UC_BLOCK
+
+  UC_REVIEW -[hidden]down- UC_SCORE
+  UC_SCORE -[hidden]right- UC_FETCH
+  UC_FETCH -[hidden]down- UC_CALC
+  UC_CALC -[hidden]down- UC_PUBLISH
+  UC_PUBLISH -[hidden]down- UC_BLOCK
+
+  UC_SCORE ..> UC_FETCH : <<include>>
+  UC_SCORE ..> UC_CALC : <<include>>
+  UC_PUBLISH ..> UC_SCORE : <<extend>>
+  UC_BLOCK ..> UC_SCORE : <<extend>>
+}
+
+SDK --> UC_IDENT
+MD --> UC_IDENT
+MD --> UC_KEYS
+PSP --> UC_SCORE
+FA --> UC_REVIEW
 
 @enduml
