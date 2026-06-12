@@ -247,12 +247,14 @@
   \pagenumbering{roman}%
   \setcounter{page}{1}%
   \renewcommand{\thepage}{\Roman{page}}%
+  \renewcommand{\ncit@pageoftotal}{[\thepage]}%
 }
 \newcommand{\mainmatter}{%
   \clearpage
   \pagenumbering{arabic}%
   \setcounter{page}{1}%
   \renewcommand{\thepage}{\arabic{page}}%
+  \renewcommand{\ncit@pageoftotal}{[\thepage/\pageref{LastPage}]}%
 }
 
 % ---------------------------------------------------------------------------
@@ -372,6 +374,7 @@
   \pagenumbering{roman}%
   \setcounter{page}{1}%
   \renewcommand{\thepage}{\Roman{page}}%
+  \renewcommand{\ncit@pageoftotal}{[\thepage]}%
   \pagestyle{fancy}
   \begin{center}
     {\bfseries ABSTRACT}
@@ -413,6 +416,7 @@
 }
 \newcommand{\ncitprintfrontmatter}{%
   \tableofcontents
+  \clearpage
   \listoftables
   \listoffigures
   \mainmatter
