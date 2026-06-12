@@ -43,16 +43,6 @@
   \fill[black!3] (\xl, 0.20) rectangle (\xr, \TH-0.50);
 }
 
-% ============================================================
-% ROW 0  — Date headers (top)
-% ============================================================
-\pgfmathsetmacro{\dateY}{\TH-0.22}
-\node[hdr, font=\fontsize{5.5}{6.5}\selectfont] at (\LW+0.5*\SW, \dateY) {Wk\,1};
-\node[hdr, font=\fontsize{5.5}{6.5}\selectfont] at (\LW+1.5*\SW, \dateY) {Wk\,2};
-\node[hdr, font=\fontsize{5.5}{6.5}\selectfont] at (\LW+2.5*\SW, \dateY) {Wk\,3};
-\node[hdr, font=\fontsize{5.5}{6.5}\selectfont] at (\LW+3.5*\SW, \dateY) {Wk\,4};
-\node[hdr, font=\fontsize{5.5}{6.5}\selectfont] at (\LW+4.5*\SW, \dateY) {Wk\,5};
-\node[hdr, font=\fontsize{5.5}{6.5}\selectfont] at (\LW+5.5*\SW, \dateY) {Wk\,6};
 
 % ============================================================
 % ROW 1  — Sprint headers
@@ -180,23 +170,14 @@
 % ============================================================
 % Milestones  (◆ diamond markers)
 % ============================================================
-% Proposal defense — end of Sprint 1
 \pgfmathsetmacro{\msA}{\LW + 1*\SW}
 \node[milestone] at (\msA, 0.45) {};
-\node[font=\fontsize{5}{6}\selectfont, anchor=north, align=center]
-  at (\msA, 0.28) {Proposal};
 
-% Mid-term defense — end of Sprint 3
 \pgfmathsetmacro{\msB}{\LW + 3*\SW}
 \node[milestone] at (\msB, 0.45) {};
-\node[font=\fontsize{5}{6}\selectfont, anchor=north, align=center]
-  at (\msB, 0.28) {Mid-term};
 
-% Final defense — end of Sprint 6
 \pgfmathsetmacro{\msC}{\LW + 6*\SW}
 \node[milestone] at (\msC, 0.45) {};
-\node[font=\fontsize{5}{6}\selectfont, anchor=north, align=center]
-  at (\msC, 0.28) {Final};
 
 % ============================================================
 % Outer frame
