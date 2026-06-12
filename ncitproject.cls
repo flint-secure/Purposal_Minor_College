@@ -247,14 +247,14 @@
   \pagenumbering{roman}%
   \setcounter{page}{1}%
   \renewcommand{\thepage}{\Roman{page}}%
-  \renewcommand{\ncit@pageoftotal}{[\thepage]}%
+  \gdef\ncit@pageoftotal{[\thepage]}%
 }
 \newcommand{\mainmatter}{%
   \clearpage
   \pagenumbering{arabic}%
   \setcounter{page}{1}%
   \renewcommand{\thepage}{\arabic{page}}%
-  \renewcommand{\ncit@pageoftotal}{[\thepage/\pageref{LastPage}]}%
+  \gdef\ncit@pageoftotal{[\thepage/\pageref{LastPage}]}%
 }
 
 % ---------------------------------------------------------------------------
@@ -374,7 +374,7 @@
   \pagenumbering{roman}%
   \setcounter{page}{1}%
   \renewcommand{\thepage}{\Roman{page}}%
-  \renewcommand{\ncit@pageoftotal}{[\thepage]}%
+  \gdef\ncit@pageoftotal{[\thepage]}%
   \pagestyle{fancy}
   \begin{center}
     {\bfseries ABSTRACT}
