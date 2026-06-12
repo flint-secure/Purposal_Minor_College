@@ -25,25 +25,24 @@ missed; when rules are too strict, honest customers are blocked and providers lo
 \subsection{Main Objective}
 The main objective is to design, implement, and test a real-time fraud and device-intelligence platform for Nepali Payment Service Providers (PSPs). The goal is to achieve stable device identification that persists across browser or app updates, along with risk scoring that incorporates SIM-swap detection as a key signal.
 
-On performance, the target is for the system to respond to score requests in under 50\,ms for the majority of cases (aiming for around 95\%), while being able to sustain a throughput in the range of approximately 3,200 requests per second under planned load testing conditions.
+The main deliverables will be a Go backend API, background workers, and a JavaScript web SDK.
 
 To validate these goals, a comprehensive automated test suite (targeting roughly 168 test cases) will be developed, with a target pass rate of at least 92\%. The system design, build steps, and validation methodology are described in Sections~\ref{sec:methodology} and~\ref{sec:validation}.
 
 \section{Significance of the Study}
 
 International tools such as Stripe Radar, Sift, and Sardine are strong but costly for typical
-Nepali wallet volumes and are not tuned for local problems like SIM swap. Flint Secure is
-significant because it will offer \textbf{affordable, local} fraud infrastructure using open
-software (Go, Redis, NATS, PostgreSQL) that a PSP can run on low-cost cloud hardware. The
-project will also show that a minor-project team can meet clear performance and security
-targets suitable for a pilot deployment.
+Nepali wallet volumes and are not tuned for local problems like SIM swap. Flint Secure matters
+because it gives PSPs \textbf{affordable, local} fraud tools built on open software (Go, Redis,
+NATS, PostgreSQL) that run on cheap cloud hardware. It also shows that a minor-project team can
+hit real performance and security targets, not just a demo.
 
 \section{Literature Study/Review}
 \label{sec:literature}
 
-This section reviews prior work on device fingerprinting, payment fraud, velocity checks,
-mobile account takeover, and the Nepali context. It supports the design in
-Section~\ref{sec:methodology}.
+Below we cover earlier work on device fingerprinting, payment fraud, velocity checks,
+mobile account takeover, and the Nepali situation that shaped our design
+(Section~\ref{sec:methodology}).
 
 \subsection{Device Fingerprinting and Identity Stability}
 Eckersley~\cite{eckersley2010} showed that browser signals can identify devices without
@@ -179,9 +178,9 @@ and background \textbf{workers} for processing and updates.
 Figure~\ref{fig:gantt} is the \textbf{sprint planning Gantt chart} for the six-week build plan.
 
 \ganttfigure[0.95]{gantt}{Sprint planning Gantt chart.}
-Each column is one sprint. Colour-coded bars show the main work items; bars spanning multiple
-sprints indicate where tasks overlap with dependencies shown by arrows. The plan will be
-updated with the supervisor after each sprint (Appendix~B log).
+Each column is one sprint, and each coloured bar is a work item. Bars that stretch across
+sprints mean the task carries over; arrows show which task depends on which. We will update
+this plan with the supervisor after each sprint (Appendix~B log).
 
 \section{Bibliography/References}
 \phantomsection
