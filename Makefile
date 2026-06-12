@@ -6,7 +6,7 @@ LATEXFLAGS = -interaction=nonstopmode -halt-on-error -file-line-error
 UML_SRC = $(wildcard figures/uml/src/*.puml)
 UML_PDF = $(patsubst figures/uml/src/%.puml,figures/uml/%.pdf,$(UML_SRC))
 
-.PHONY: all pdf uml clean watch open
+.PHONY: all pdf uml clean watch open docker-pdf
 
 all: pdf
 
@@ -23,9 +23,18 @@ $(MAIN).pdf: $(MAIN).tex $(CLS) sections/*.tex $(UML_PDF)
 	$(LATEX) $(LATEXFLAGS) $(MAIN).tex
 	$(LATEX) $(LATEXFLAGS) $(MAIN).tex
 
+# Build PDF using Docker (no local LaTeX installation required)
+docker-pdf:
+	@echo "Copying Times New Roman fonts from Windows hosts (if applicable)..."
+	-@powershell -Command "if (Test-Path C:\Windows\Fonts) { New-Item -ItemType Directory -Force -Path .\fonts; Copy-Item -Path 'C:\Windows\Fonts\times*.ttf' -Destination .\fonts\ }" 2>/dev/null || true
+	@echo "Building LaTeX PDF via Docker..."
+	docker build --output=. .
+	@echo "Build successful! proposal.pdf is updated."
+
 clean:
 	rm -f $(MAIN).{aux,log,out,toc,lof,lot,fls,fdb_latexmk,synctex.gz}
 	rm -f figures/uml/*.pdf
+	rm -rf fonts
 
 pdf-clean: clean pdf
 

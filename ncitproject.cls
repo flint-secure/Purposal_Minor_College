@@ -52,7 +52,7 @@
     Scale=1.0,
   ]
   \newcommand{\ncit@collegefont}{%
-    \fontspec{Arial Black}\fontsize{20}{24}\selectfont}%
+    \fontspec{Times New Roman}\bfseries\fontsize{20}{24}\selectfont}%
 \else
   \RequirePackage[T1]{fontenc}
   \RequirePackage[utf8]{inputenc}
@@ -352,7 +352,7 @@
   \noindent
 }{%
   \par\vspace{0.8em}%
-  \noindent\textbf{Keywords:} \ncit@keywords
+  \noindent\textbf{Keywords:}\par\noindent\ncit@keywords
   \phantomsection
   \addcontentsline{toc}{section}{Abstract}%
 }

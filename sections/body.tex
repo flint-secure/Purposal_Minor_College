@@ -23,13 +23,11 @@ missed; when rules are too strict, honest customers are blocked and providers lo
 \section{Project Objectives}
 
 \subsection{Main Objective}
-The \textbf{main objective} is to \textbf{design, implement, and test} Flint Secure: a
-real-time fraud and device-intelligence platform for Nepali PSPs. The platform will provide
-stable device identification across browser or app updates, risk scoring with SIM-swap
-protection, and measurable speed targets (95\% of score requests under 50\,ms and about
-3,200 requests per second in planned load tests). A large automated test suite (about 168
-cases, at least 92\% pass) will be used to verify behaviour. Build steps and validation are
-described in Sections~\ref{sec:methodology} and~\ref{sec:validation}.
+The main objective is to design, implement, and test a real-time fraud and device-intelligence platform for Nepali Payment Service Providers (PSPs). The goal is to achieve stable device identification that persists across browser or app updates, along with risk scoring that incorporates SIM-swap detection as a key signal.
+
+On performance, the target is for the system to respond to score requests in under 50\,ms for the majority of cases (aiming for around 95\%), while being able to sustain a throughput in the range of approximately 3,200 requests per second under planned load testing conditions.
+
+To validate these goals, a comprehensive automated test suite (targeting roughly 168 test cases) will be developed, with a target pass rate of at least 92\%. The system design, build steps, and validation methodology are described in Sections~\ref{sec:methodology} and~\ref{sec:validation}.
 
 \section{Significance of the Study}
 
@@ -84,7 +82,7 @@ set (see Section~\ref{sec:validation}).
 \label{sec:methodology}
 
 This section explains \textbf{how} the system will be built: process, tools, main steps, and
-design diagrams (Figures~\ref{fig:uml-use-case}, \ref{fig:uml-seq-identify}, \ref{fig:uml-seq-score}, \ref{fig:uml-seq-three}, and~\ref{fig:uml-seq-four}).
+design diagrams (Figures~\ref{fig:uml-use-case}, \ref{fig:uml-seq-identify}, \ref{fig:uml-seq-score}, \ref{fig:uml-seq-three}, \ref{fig:uml-seq-four}, and~\ref{fig:er-diagram}).
 
 \subsection{Software Development Life Cycle}
 We will follow an \textbf{Agile} plan with two-week sprints (Table~\ref{tab:schedule}). Each
