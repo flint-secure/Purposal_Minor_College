@@ -186,6 +186,19 @@
   \label{fig:#2}%
   \par\vspace{0.2em}%
 }
+% \erdiagramfigure[width factor]{label}{caption} — TikZ ER diagram (rule-based schema)
+\newcommand{\erdiagramfigure}[3][0.95]{%
+  \par\vspace{0.2em}%
+  \begin{center}%
+    \resizebox{#1\linewidth}{!}{%
+      \input{figures/er-diagram.tex}%
+    }%
+  \end{center}%
+  \vspace{0.1em}%
+  \captionof{figure}{#3}%
+  \label{fig:#2}%
+  \par\vspace{0.2em}%
+}
 % \umlfigure[width factor]{label}{basename}{caption}
 \newcommand{\umlfigure}[4][1.0]{%
   \par\vspace{0.2em}%

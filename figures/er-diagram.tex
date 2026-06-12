@@ -1,0 +1,65 @@
+% ER diagram — rule-based schema (no ML_Model; initial proposal scope)
+\begin{tikzpicture}[
+  font=\tiny,
+  entity/.style={
+    rectangle,
+    draw,
+    line width=0.45pt,
+    fill=white,
+    align=left,
+    inner sep=3pt,
+    text width=1.55cm
+  },
+  rel/.style={
+    diamond,
+    draw,
+    line width=0.45pt,
+    fill=white,
+    aspect=1.6,
+    inner sep=0.5pt,
+    font=\fontsize{4.5}{5.5}\selectfont,
+    align=center,
+    text width=0.95cm
+  },
+  link/.style={line width=0.45pt}
+]
+
+\node[entity] (merchant) at (0, 2.4) {%
+  \textbf{Merchant}\\ Merchant\_ID\\ Name\\ API\_Key\_ID};
+\node[entity] (device) at (3.2, 2.4) {%
+  \textbf{Device}\\ Device\_ID\\ Fingerprint\\ Device\_Type};
+\node[entity] (txn) at (6.4, 2.4) {%
+  \textbf{Transaction}\\ Tx\_ID\\ Amount\\ Timestamp\\ Status};
+
+\node[entity] (analyst) at (0, -0.6) {%
+  \textbf{Analyst}\\ Analyst\_ID\\ Role\\ Name};
+\node[entity] (alert) at (3.2, -0.6) {%
+  \textbf{Alert}\\ Created\_At\\ Alert\_Status};
+\node[entity] (score) at (6.4, -0.6) {%
+  \textbf{Risk\_Score}\\ Score\_ID\\ Score\_Value\\ Rule\_Flags};
+
+\node[entity] (label) at (1.6, -3.2) {%
+  \textbf{Fraud\_Label}\\ Label\_ID\\ Label\_Value};
+\node[entity] (webhook) at (5.0, -3.2) {%
+  \textbf{Webhook}\\ Webhook\_ID\\ Endpoint\_URL\\ Retry\_Count};
+
+\node[rel] (r1) at (1.6, 2.4) {registers};
+\node[rel] (r2) at (4.8, 2.4) {identifies};
+\node[rel] (r3) at (6.4, 0.9) {scored\_by};
+\node[rel] (r4) at (4.8, 0.9) {triggers};
+\node[rel] (r5) at (1.6, -0.6) {reviews};
+\node[rel] (r6) at (2.4, -1.9) {generates};
+\node[rel] (r7) at (2.5, -3.2) {owns};
+\node[rel] (r8) at (5.7, -1.9) {notifies};
+
+\draw[link] (merchant.east) -- (r1) -- (device.west);
+\draw[link] (device.east) -- (r2) -- (txn.west);
+\draw[link] (txn.south) -- (r3) -- (score.north);
+\draw[link] (txn.south) -- (r4) -- (alert.north);
+\draw[link] (analyst.east) -- (r5) -- (alert.west);
+\draw[link] (alert.south) -- (r6) -- (label.north);
+\draw[link] (merchant.south) -- ++(0,-0.35) -| (r7.west);
+\draw[link] (r7) -- (webhook.west);
+\draw[link] (score.south) -- (r8) -- (webhook.north);
+
+\end{tikzpicture}
