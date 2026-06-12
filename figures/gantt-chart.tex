@@ -19,7 +19,7 @@
 \pgfmathsetmacro{\SW}{1.65}        % sprint column width
 \pgfmathsetmacro{\NS}{6}           % number of sprints
 \pgfmathsetmacro{\TW}{\LW+\NS*\SW} % total width
-\pgfmathsetmacro{\TH}{6.75}        % total height
+\pgfmathsetmacro{\TH}{5.60}        % total height
 
 % ---------- phase colours (CMYK-safe) ----------
 \definecolor{cInfra}{HTML}{3B82F6}   % blue
@@ -47,37 +47,13 @@
 % ============================================================
 % ROW 1  — Sprint headers
 % ============================================================
-\pgfmathsetmacro{\hdrY}{\TH-0.60}
+\pgfmathsetmacro{\hdrY}{\TH-0.22}
 \draw[line width=0.35pt, black!40] (\LW, \TH-0.42) -- (\TW, \TH-0.42);
 \foreach \i in {1,...,6} {
   \pgfmathsetmacro{\cx}{\LW + (\i-0.5)*\SW}
   \node[hdr] at (\cx, \hdrY) {Sprint \i};
 }
 
-% ============================================================
-% ROW 2  — Sprint goals
-% ============================================================
-\pgfmathsetmacro{\goalTop}{\TH-0.78}
-\pgfmathsetmacro{\goalBot}{\TH-1.42}
-\draw[line width=0.3pt, black!30] (\LW, \goalTop) -- (\TW, \goalTop);
-\draw[line width=0.3pt, black!20] (\LW, \goalBot) -- (\TW, \goalBot);
-\node[lbl, font=\scriptsize\bfseries] at (\LW-0.08, {(\goalTop+\goalBot)/2}) {Sprint goal};
-
-\foreach \i/\g in {
-  1/{Boot stack},
-  2/{Secure API},
-  3/{SDK ready},
-  4/{Device match},
-  5/{Score API},
-  6/{Test \& ship}
-} {
-  \pgfmathsetmacro{\slot}{int(\i)-1}
-  \pgfmathsetmacro{\cx}{\LW + (\slot+0.5)*\SW}
-  \pgfmathsetmacro{\xleft}{\LW + \slot*\SW}
-  \pgfmathsetmacro{\xright}{\LW + int(\i)*\SW}
-  \fill[cGoalBg] (\xleft, \goalBot) rectangle (\xright, \goalTop);
-  \node[goal] at (\cx, {(\goalTop+\goalBot)/2}) {\g};
-}
 
 % ============================================================
 % Helper macro: \drawbar{y}{startSprint}{endSprint}{color}
