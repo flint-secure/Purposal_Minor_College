@@ -85,9 +85,9 @@ This section explains \textbf{how} the system will be built: process, tools, mai
 design diagrams (Figures~\ref{fig:uml-use-case}, \ref{fig:uml-seq-identify}, \ref{fig:uml-seq-keys}, and~\ref{fig:uml-seq-score}).
 
 \subsection{Software Development Life Cycle}
-We will follow an \textbf{Agile} plan with two-week sprints in three separations
-(Figure~\ref{fig:gantt} and Table~\ref{tab:schedule}). Each sprint will end with testable
-code and a short supervisor meeting (NCIT Appendix~B log).
+We will follow \textbf{Agile sprint planning} with six one-week sprints (Figure~\ref{fig:gantt}).
+At the start of each sprint the team sets a sprint goal and commits backlog items; each sprint
+ends with testable code and a supervisor check-in (NCIT Appendix~B log).
 
 \subsection{Tools and Technologies}
 The planned stack includes Go with the chi router, two Redis instances, PostgreSQL, NATS
@@ -176,37 +176,15 @@ and background \textbf{workers} for processing and updates.
 
 \section{Project Task and Time Schedule}
 
-The team will follow the college semester and NCIT defense dates (proposal, mid-term, and final,
-with at least four weeks between defenses). Development will use \textbf{Agile} with
-\textbf{two-week sprints} grouped into \textbf{three separations} (Figure~\ref{fig:gantt}).
-Each sprint will deliver testable code and a short supervisor check-in (Appendix~B log).
+The team will follow the college semester and NCIT defense dates (proposal, mid-term, and final).
+Figure~\ref{fig:gantt} is the \textbf{sprint planning Gantt chart} for the six-week build plan.
 
-\ganttfigure[0.98]{gantt}{Agile Gantt chart: three separations and two-week sprints (Jun--Oct 2026).}
-Figure~\ref{fig:gantt} shows the planned timeline. \textbf{Separation~I} (Sprints~1--2) covers
-repository setup, databases, messaging, and security middleware. \textbf{Separation~II}
-(Sprints~3--4) delivers the Web SDK and device identification API with background indexing.
-\textbf{Separation~III} (Sprints~5--8) implements rule-based scoring, Go workers, deployment,
-load testing, and defense preparation. Milestones align with the proposal, mid-term, and final
-defenses.
-
-\vspace{0.5em}
-\begin{center}
-  \small
-  \begin{tabularx}{0.92\textwidth}{|>{\raggedright\arraybackslash}l|X|>{\raggedright\arraybackslash}l|}
-    \hline
-    \textbf{Milestone} & \textbf{Planned focus} & \textbf{Outcome} \\
-    \hline
-    Proposal & Report, design, presentation & Proposal defense \\
-    \hline
-    Mid-term & Separations I--II complete; scoring started & Mid-term defense \\
-    \hline
-    Final & Separation III complete; tests and documentation & Final defense \\
-    \hline
-  \end{tabularx}
-  \captionof{table}{Defense milestones (initial proposal)}
-  \label{tab:schedule}
-\end{center}
-\vspace{0.5em}
+\ganttfigure[0.95]{gantt}{Sprint planning Gantt chart (six one-week sprints).}
+Each column is one sprint. The \textbf{sprint goal} row shows the commitment for each sprint
+planning session. Colour-coded bars show the main work items; bars spanning multiple sprints
+indicate where tasks overlap with dependencies shown by arrows. Diamond markers at the bottom
+mark proposal, mid-term, and final defense dates. The plan will be updated with the supervisor
+after each sprint (Appendix~B log).
 
 \section{Bibliography/References}
 \phantomsection

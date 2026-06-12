@@ -186,8 +186,8 @@
   \label{fig:#2}%
   \par\vspace{0.2em}%
 }
-% \ganttfigure[width factor]{label}{caption} — Agile Gantt chart (TikZ)
-\newcommand{\ganttfigure}[3][0.98]{%
+% \ganttfigure[width factor]{label}{caption} — Gantt chart (TikZ)
+\newcommand{\ganttfigure}[3][0.85]{%
   \par\vspace{0.2em}%
   \begin{center}%
     \resizebox{#1\linewidth}{!}{%

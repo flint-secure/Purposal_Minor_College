@@ -1,81 +1,233 @@
-% Agile Gantt chart — three separations, two-week sprints (Jun–Nov 2026)
+% Sprint-planning Gantt chart — six 1-week sprints
+% Improved: coloured phase bars, multi-sprint spans, milestones,
+% dependencies, legend, date row, and cleaner typography.
 \begin{tikzpicture}[
-  x=0.38cm,
-  y=0.72cm,
-  font=\tiny,
-  sprint/.style={
-    rectangle,
-    draw,
-    line width=0.4pt,
-    fill=white,
-    minimum height=0.48cm,
-    align=center,
-    font=\fontsize{4.5}{5.5}\selectfont
-  },
-  mile/.style={
-    diamond,
-    draw,
-    line width=0.4pt,
-    fill=black!12,
-    inner sep=0.5pt
-  },
-  sep/.style={
-    rectangle,
-    draw,
-    line width=0.55pt,
-    fill=none,
-    inner sep=6pt
-  },
-  grid/.style={line width=0.2pt, black!25}
+  x=1cm,
+  y=1cm,
+  font=\footnotesize,
+  lbl/.style={font=\scriptsize, align=right, text width=3.0cm, anchor=east},
+  hdr/.style={font=\scriptsize\bfseries, align=center},
+  goal/.style={font=\fontsize{5.8}{7}\selectfont, align=center, text width=1.55cm},
+  bar/.style={rectangle, rounded corners=1.2pt, draw=none,
+              minimum height=0.38cm, inner sep=0pt},
+  milestone/.style={diamond, draw, fill=black!80, inner sep=1.6pt,
+                    minimum size=0pt},
 ]
 
-% Week grid (16 weeks = 8 two-week sprints)
-\foreach \w in {0,...,16} {
-  \draw[grid] (\w, -0.3) -- (\w, 7.6);
+% ---------- layout constants ----------
+\pgfmathsetmacro{\LW}{3.15}        % label column width
+\pgfmathsetmacro{\SW}{1.65}        % sprint column width
+\pgfmathsetmacro{\NS}{6}           % number of sprints
+\pgfmathsetmacro{\TW}{\LW+\NS*\SW} % total width
+\pgfmathsetmacro{\TH}{6.75}        % total height
+
+% ---------- phase colours (CMYK-safe) ----------
+\definecolor{cInfra}{HTML}{3B82F6}   % blue
+\definecolor{cSec}{HTML}{8B5CF6}     % purple
+\definecolor{cSDK}{HTML}{10B981}     % teal
+\definecolor{cDevice}{HTML}{F59E0B}  % amber
+\definecolor{cRisk}{HTML}{EF4444}    % red
+\definecolor{cTest}{HTML}{6366F1}    % indigo
+\definecolor{cGoalBg}{HTML}{F1F5F9}  % light slate
+
+% ---------- vertical grid ----------
+\foreach \i in {0,...,\NS} {
+  \pgfmathsetmacro{\x}{\LW + \i*\SW}
+  \draw[line width=0.2pt, black!15] (\x, 0.20) -- (\x, \TH);
 }
-\foreach \w/\lbl in {0/Jun, 4/Jul, 8/Aug, 12/Sep, 16/Oct} {
-  \node[font=\scriptsize] at (\w, 7.9) {\lbl};
+
+% ---------- alternating column shading ----------
+\foreach \i in {0,2,4} {
+  \pgfmathsetmacro{\xl}{\LW + \i*\SW}
+  \pgfmathsetmacro{\xr}{\LW + (\i+1)*\SW}
+  \fill[black!3] (\xl, 0.20) rectangle (\xr, \TH-0.50);
 }
-\node[anchor=west, font=\scriptsize\bfseries] at (-3.6, 7.9) {2026};
 
-% --- Separation I: Foundation & infrastructure ---
-\node[sprint, text width=1.55cm] (s11) at (1, 6.2) {Repo \&\\Docker};
-\node[sprint, text width=1.55cm] (s12) at (3, 6.2) {PostgreSQL,\\Redis, NATS};
-\node[sprint, text width=1.55cm] (s21) at (1, 5.2) {API keys \&\\middleware};
-\node[sprint, text width=1.55cm] (s22) at (3, 5.2) {GeoIP, rate\\limits, CI};
+% ============================================================
+% ROW 0  — Date headers (top)
+% ============================================================
+\pgfmathsetmacro{\dateY}{\TH-0.22}
+\node[hdr, font=\fontsize{5.5}{6.5}\selectfont] at (\LW+0.5*\SW, \dateY) {Wk\,1};
+\node[hdr, font=\fontsize{5.5}{6.5}\selectfont] at (\LW+1.5*\SW, \dateY) {Wk\,2};
+\node[hdr, font=\fontsize{5.5}{6.5}\selectfont] at (\LW+2.5*\SW, \dateY) {Wk\,3};
+\node[hdr, font=\fontsize{5.5}{6.5}\selectfont] at (\LW+3.5*\SW, \dateY) {Wk\,4};
+\node[hdr, font=\fontsize{5.5}{6.5}\selectfont] at (\LW+4.5*\SW, \dateY) {Wk\,5};
+\node[hdr, font=\fontsize{5.5}{6.5}\selectfont] at (\LW+5.5*\SW, \dateY) {Wk\,6};
 
-\node[sep, fit=(s11)(s12)(s21)(s22),
-  label={[anchor=east, align=right, text width=2.7cm]left:{\textbf{Separation I}\\Foundation \&\\infrastructure}}] {};
+% ============================================================
+% ROW 1  — Sprint headers
+% ============================================================
+\pgfmathsetmacro{\hdrY}{\TH-0.60}
+\draw[line width=0.35pt, black!40] (\LW, \TH-0.42) -- (\TW, \TH-0.42);
+\foreach \i in {1,...,6} {
+  \pgfmathsetmacro{\cx}{\LW + (\i-0.5)*\SW}
+  \node[hdr] at (\cx, \hdrY) {Sprint \i};
+}
 
-% --- Separation II: Device identification ---
-\node[sprint, text width=1.55cm] (s31) at (5, 4.0) {Web SDK \&\\signals};
-\node[sprint, text width=1.55cm] (s32) at (7, 4.0) {Identify API\\L1--L2};
-\node[sprint, text width=1.55cm] (s41) at (5, 3.0) {Fuzzy match\\L3};
-\node[sprint, text width=1.55cm] (s42) at (7, 3.0) {Device\\workers};
+% ============================================================
+% ROW 2  — Sprint goals
+% ============================================================
+\pgfmathsetmacro{\goalTop}{\TH-0.78}
+\pgfmathsetmacro{\goalBot}{\TH-1.42}
+\draw[line width=0.3pt, black!30] (\LW, \goalTop) -- (\TW, \goalTop);
+\draw[line width=0.3pt, black!20] (\LW, \goalBot) -- (\TW, \goalBot);
+\node[lbl, font=\scriptsize\bfseries] at (\LW-0.08, {(\goalTop+\goalBot)/2}) {Sprint goal};
 
-\node[sep, fit=(s31)(s32)(s41)(s42),
-  label={[anchor=east, align=right, text width=2.7cm]left:{\textbf{Separation II}\\Device\\identification}}] {};
+\foreach \i/\g in {
+  1/{Boot stack},
+  2/{Secure API},
+  3/{SDK ready},
+  4/{Device match},
+  5/{Score API},
+  6/{Test \& ship}
+} {
+  \pgfmathsetmacro{\slot}{int(\i)-1}
+  \pgfmathsetmacro{\cx}{\LW + (\slot+0.5)*\SW}
+  \pgfmathsetmacro{\xleft}{\LW + \slot*\SW}
+  \pgfmathsetmacro{\xright}{\LW + int(\i)*\SW}
+  \fill[cGoalBg] (\xleft, \goalBot) rectangle (\xright, \goalTop);
+  \node[goal] at (\cx, {(\goalTop+\goalBot)/2}) {\g};
+}
 
-% --- Separation III: Scoring, workers & delivery ---
-\node[sprint, text width=1.55cm] (s51) at (9, 2.0) {Scoring\\engine};
-\node[sprint, text width=1.55cm] (s52) at (11, 2.0) {Velocity \&\\NATS events};
-\node[sprint, text width=1.55cm] (s61) at (9, 1.0) {Go workers\\profiles};
-\node[sprint, text width=1.55cm] (s62) at (11, 1.0) {Deploy \&\\health checks};
-\node[sprint, text width=3.2cm] (s78) at (10, 0.0) {k6 tests, automated suite, defense prep};
+% ============================================================
+% Helper macro: \drawbar{y}{startSprint}{endSprint}{color}
+%   startSprint, endSprint are 1-based sprint numbers
+% ============================================================
+\def\drawbar#1#2#3#4{%
+  \pgfmathsetmacro{\xone}{\LW + (#2-1)*\SW + 0.10}%
+  \pgfmathsetmacro{\xlen}{(#3 - #2 + 1)*\SW - 0.20}%
+  \node[bar, fill=#4, minimum width=\xlen cm, anchor=west] at (\xone, #1) {};%
+}
 
-\node[sep, fit=(s51)(s52)(s61)(s62)(s78),
-  label={[anchor=east, align=right, text width=2.7cm]left:{\textbf{Separation III}\\Scoring, workers\\\& delivery}}] {};
+% ============================================================
+% TASK BARS  — realistic overlapping schedule
+% ============================================================
+% Phase 1 — Infrastructure  (Sprints 1–2)
+\pgfmathsetmacro{\rA}{4.55}
+\node[lbl] at (\LW-0.08, \rA) {Infrastructure};
+\drawbar{\rA}{1}{2}{cInfra}
 
-% Milestones
-\node[mile] (m0) at (0.5, 7.2) {};
-\node[anchor=south, font=\fontsize{4}{5}\selectfont] at (m0.north) {Proposal};
-\node[mile] (m1) at (9.5, 7.2) {};
-\node[anchor=south, font=\fontsize{4}{5}\selectfont] at (m1.north) {Mid-term};
-\node[mile] (m1b) at (15.5, 7.2) {};
-\node[anchor=south, font=\fontsize{4}{5}\selectfont] at (m1b.north) {Final};
+% Phase 1 — Security middleware  (Sprints 2–3, overlaps)
+\pgfmathsetmacro{\rB}{3.95}
+\node[lbl] at (\LW-0.08, \rB) {Security middleware};
+\drawbar{\rB}{2}{3}{cSec}
 
-% Legend
-\node[anchor=west, font=\fontsize{4.5}{5.5}\selectfont] at (0, -0.8) {%
-  \textbf{Agile:} two-week sprints; supervisor check-in each sprint; working demo at each milestone.};
+% Phase 2 — Web SDK  (Sprints 3–4)
+\pgfmathsetmacro{\rC}{3.35}
+\node[lbl] at (\LW-0.08, \rC) {Web SDK};
+\drawbar{\rC}{3}{4}{cSDK}
+
+% Phase 2 — Device matching  (Sprints 3–4, parallel with SDK)
+\pgfmathsetmacro{\rD}{2.75}
+\node[lbl] at (\LW-0.08, \rD) {Device matching};
+\drawbar{\rD}{3}{4}{cDevice}
+
+% Phase 3 — Risk scoring  (Sprints 4–5)
+\pgfmathsetmacro{\rE}{2.15}
+\node[lbl] at (\LW-0.08, \rE) {Risk scoring};
+\drawbar{\rE}{4}{5}{cRisk}
+
+% Phase 4 — Workers \& deploy  (Sprint 5)
+\pgfmathsetmacro{\rF}{1.55}
+\node[lbl] at (\LW-0.08, \rF) {Workers \& deploy};
+\drawbar{\rF}{5}{5}{cSec!70}
+
+% Testing \& docs  (Sprints 5–6)
+\pgfmathsetmacro{\rG}{0.95}
+\node[lbl] at (\LW-0.08, \rG) {Testing \& docs};
+\drawbar{\rG}{5}{6}{cTest}
+
+% ============================================================
+% Dependency arrows — vertical drops at the sprint handoff column
+%   Each arrow drops straight down from predecessor bar to successor
+%   bar at the sprint column where they overlap.
+% ============================================================
+\tikzset{dep/.style={-{Stealth[length=4pt,width=3pt]},
+         line width=0.8pt, black!75}}
+
+% Infra (S1–2) → Security (S2–3) : handoff at mid-Sprint 2
+\pgfmathsetmacro{\hS}{0.19}   % half bar height for start/end offsets
+\pgfmathsetmacro{\xAB}{\LW + 1.5*\SW}
+\draw[dep] (\xAB, \rA-\hS) -- (\xAB, \rB+\hS);
+
+% Security (S2–3) → Web SDK (S3–4) : handoff at mid-Sprint 3
+\pgfmathsetmacro{\xBC}{\LW + 2.5*\SW}
+\draw[dep] (\xBC, \rB-\hS) -- (\xBC, \rC+\hS);
+
+% Security (S2–3) → Device matching (S3–4) : handoff at mid-Sprint 3
+%   offset slightly right so it doesn't overlap the SDK arrow
+\pgfmathsetmacro{\xBD}{\LW + 2.5*\SW + 0.20}
+\draw[dep] (\xBD, \rB-\hS) -- (\xBD, \rD+\hS);
+
+% Web SDK (S3–4) → Risk scoring (S4–5) : handoff at mid-Sprint 4
+\pgfmathsetmacro{\xCE}{\LW + 3.5*\SW}
+\draw[dep] (\xCE, \rC-\hS) -- (\xCE, \rE+\hS);
+
+% Device matching (S3–4) → Risk scoring (S4–5) : handoff at mid-Sprint 4
+%   offset slightly right to separate from SDK→Risk arrow
+\pgfmathsetmacro{\xDE}{\LW + 3.5*\SW + 0.20}
+\draw[dep] (\xDE, \rD-\hS) -- (\xDE, \rE+\hS);
+
+% Risk scoring (S4–5) → Workers & deploy (S5) : handoff at mid-Sprint 5
+\pgfmathsetmacro{\xEF}{\LW + 4.5*\SW}
+\draw[dep] (\xEF, \rE-\hS) -- (\xEF, \rF+\hS);
+
+% Workers & deploy (S5) → Testing & docs (S5–6) : handoff at mid-Sprint 5
+%   offset slightly right to separate from Risk→Workers arrow
+\pgfmathsetmacro{\xFG}{\LW + 4.5*\SW + 0.20}
+\draw[dep] (\xFG, \rF-\hS) -- (\xFG, \rG+\hS);
+
+% ============================================================
+% Milestones  (◆ diamond markers)
+% ============================================================
+% Proposal defense — end of Sprint 1
+\pgfmathsetmacro{\msA}{\LW + 1*\SW}
+\node[milestone] at (\msA, 0.45) {};
+\node[font=\fontsize{5}{6}\selectfont, anchor=north, align=center]
+  at (\msA, 0.28) {Proposal};
+
+% Mid-term defense — end of Sprint 3
+\pgfmathsetmacro{\msB}{\LW + 3*\SW}
+\node[milestone] at (\msB, 0.45) {};
+\node[font=\fontsize{5}{6}\selectfont, anchor=north, align=center]
+  at (\msB, 0.28) {Mid-term};
+
+% Final defense — end of Sprint 6
+\pgfmathsetmacro{\msC}{\LW + 6*\SW}
+\node[milestone] at (\msC, 0.45) {};
+\node[font=\fontsize{5}{6}\selectfont, anchor=north, align=center]
+  at (\msC, 0.28) {Final};
+
+% ============================================================
+% Outer frame
+% ============================================================
+\draw[line width=0.55pt] (0, 0.20) rectangle (\TW, \TH);
+\draw[line width=0.35pt] (\LW, 0.20) -- (\LW, \TH);
+
+% ============================================================
+% Legend (below the chart)
+% ============================================================
+\pgfmathsetmacro{\legY}{-0.25}
+\pgfmathsetmacro{\legX}{\LW - 0.2}
+\node[font=\fontsize{5.5}{7}\selectfont\bfseries, anchor=west]
+  at (\legX, \legY) {Legend:};
+
+\foreach \i/\c/\t in {
+  1/cInfra/{Infra},
+  2/cSec/{Security},
+  3/cSDK/{SDK},
+  4/cDevice/{Device},
+  5/cRisk/{Risk},
+  6/cTest/{Test}
+} {
+  \pgfmathsetmacro{\lx}{\legX + 1.0 + (\i-1)*1.45}
+  \fill[\c, rounded corners=0.8pt] (\lx, \legY-0.08) rectangle ++(0.28, 0.16);
+  \node[font=\fontsize{5}{6}\selectfont, anchor=west] at (\lx+0.35, \legY) {\t};
+}
+
+% Milestone legend entry
+\pgfmathsetmacro{\mlx}{\legX + 1.0 + 6*1.45}
+\node[milestone, inner sep=1pt] at (\mlx+0.07, \legY) {};
+\node[font=\fontsize{5}{6}\selectfont, anchor=west] at (\mlx+0.25, \legY) {Defense};
 
 \end{tikzpicture}
