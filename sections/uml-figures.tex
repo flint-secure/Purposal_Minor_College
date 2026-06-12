@@ -4,28 +4,18 @@
 The following figures summarise the proposed architecture.
 
 \newpage
-\umlfigure[1.9]{uml-use-case}{use\_case}{Updated use case diagram (PSP Backend, Web SDK, Fraud Analyst).}
-Figure~\ref{fig:uml-use-case} outlines the primary use cases of the system. The Web SDK collects client-side device parameters and sends them for identification. The PSP Backend initiates transaction risk scoring to decide payment actions. The Fraud Analyst monitors triggered alerts, performs manual reviews, and assigns fraud labels to train risk models.
+\umlfigure[1.0]{uml-use-case}{01-use-case}{Updated use case diagram (PSP Backend, Web SDK, Fraud Analyst).}
+Figure~\ref{fig:uml-use-case} outlines the primary use cases of the system. The Web SDK collects client-side device parameters and sends them for identification. The PSP Backend initiates transaction risk scoring to decide payment actions. The Fraud Analyst monitors triggered alerts, performs manual reviews, and assigns fraud labels.
 \newpage
 
-\umlfigure[1.9]{uml-seq-identify}{sequencediag}{Sequence diagram 1: device identification flow.}
+\umlfigure[1.0]{uml-seq-identify}{06-sequence-identify}{Sequence diagram 1: device identification flow.}
 Figure~\ref{fig:uml-seq-identify} illustrates the sequence of operations for device identification. The client's Web SDK extracts browser parameters, computes a local fingerprint hash, and submits them to the API Gateway. The Gateway executes a multi-step matching routine (exact, cached ID lookup, and fuzzy heuristics) to resolve or generate a unique Device ID, returning it to the SDK.
 \newpage
 
-\umlfigure[1.9]{uml-seq-score}{sequencediag2}{Sequence diagram 2: scoring flow with Redis and NATS JetStream.}
+\umlfigure[1.0]{uml-seq-score}{07-sequence-score}{Sequence diagram 2: scoring flow with Redis and NATS JetStream.}
 Figure~\ref{fig:uml-seq-score} details the real-time scoring sequence. When a PSP requests a score, the API Gateway queries the fast Redis cache in a single batch to retrieve risk limits, velocity counters, and device history. The gateway runs the rule-based scoring engine to determine the action (ALLOW, FLAG, or BLOCK), returns the decision immediately, and asynchronously publishes a transaction event to NATS JetStream.
 \newpage
 
-\begin{landscape}
-\umlfigure[1.6]{uml-seq-three}{sequencediag3}{Sequence diagram 3: additional sequence flow.}
-Figure~\ref{fig:uml-seq-three} depicts the asynchronous processing flow handled by background workers. Background workers subscribe to NATS JetStream topics to process scored transactions. They update transaction metrics in PostgreSQL, update device profiling counters in Redis, and flag anomalies without blocking the critical transaction execution path.
-\end{landscape}
-\newpage
-
-\umlfigure[1.9]{uml-seq-four}{sequencediag4}{Sequence diagram 4: additional sequence flow.}
-Figure~\ref{fig:uml-seq-four} illustrates the workflow for alert review and risk model updates. High-risk transactions trigger alerts that are queued for review. Analysts inspect these alerts and apply manual fraud labels. These labels are used to retrain and evaluate machine learning models. Once deployed, the updated models dispatch webhooks to the registered merchant endpoints.
-\newpage
-
 \umlfigure[1.0]{er-diagram}{er_diagram}{Entity-Relationship (ER) Diagram of the database schema.}
-Figure~\ref{fig:er-diagram} shows the Entity-Relationship schema for the system. It represents the structural relations between core tables: Merchants register Webhooks and own Devices. Devices identify Transactions, which in turn are scored by Risk Scores. Transactions also trigger Alerts reviewed by Analysts, who generate Fraud Labels to train the Machine Learning Models that dispatch Webhooks.
+Figure~\ref{fig:er-diagram} shows the Entity-Relationship schema for the system. It represents the structural relations between core tables: Merchants register Webhooks and own Devices. Devices identify Transactions, which in turn are scored by Risk Scores. Transactions also trigger Alerts reviewed by Analysts, who generate Fraud Labels to train the database models that dispatch Webhooks.
 
