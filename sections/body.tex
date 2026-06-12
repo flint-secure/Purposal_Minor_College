@@ -85,8 +85,9 @@ This section explains \textbf{how} the system will be built: process, tools, mai
 design diagrams (Figures~\ref{fig:uml-use-case}, \ref{fig:uml-seq-identify}, \ref{fig:uml-seq-keys}, and~\ref{fig:uml-seq-score}).
 
 \subsection{Software Development Life Cycle}
-We will follow an \textbf{Agile} plan with two-week sprints (Table~\ref{tab:schedule}). Each
-sprint will end with testable code and a short supervisor meeting (NCIT Appendix~B log).
+We will follow an \textbf{Agile} plan with two-week sprints in three separations
+(Figure~\ref{fig:gantt} and Table~\ref{tab:schedule}). Each sprint will end with testable
+code and a short supervisor meeting (NCIT Appendix~B log).
 
 \subsection{Tools and Technologies}
 The planned stack includes Go with the chi router, two Redis instances, PostgreSQL, NATS
@@ -176,28 +177,33 @@ and background \textbf{workers} for processing and updates.
 \section{Project Task and Time Schedule}
 
 The team will follow the college semester and NCIT defense dates (proposal, mid-term, and final,
-with at least four weeks between defenses). The table below is only a rough plan; details will
-be updated with the supervisor in the meeting log.
+with at least four weeks between defenses). Development will use \textbf{Agile} with
+\textbf{two-week sprints} grouped into \textbf{three separations} (Figure~\ref{fig:gantt}).
+Each sprint will deliver testable code and a short supervisor check-in (Appendix~B log).
+
+\ganttfigure[0.98]{gantt}{Agile Gantt chart: three separations and two-week sprints (Jun--Oct 2026).}
+Figure~\ref{fig:gantt} shows the planned timeline. \textbf{Separation~I} (Sprints~1--2) covers
+repository setup, databases, messaging, and security middleware. \textbf{Separation~II}
+(Sprints~3--4) delivers the Web SDK and device identification API with background indexing.
+\textbf{Separation~III} (Sprints~5--8) implements rule-based scoring, Go workers, deployment,
+load testing, and defense preparation. Milestones align with the proposal, mid-term, and final
+defenses.
 
 \vspace{0.5em}
 \begin{center}
   \small
   \begin{tabularx}{0.92\textwidth}{|>{\raggedright\arraybackslash}l|X|>{\raggedright\arraybackslash}l|}
     \hline
-    \textbf{Phase} & \textbf{Planned focus} & \textbf{Outcome} \\
+    \textbf{Milestone} & \textbf{Planned focus} & \textbf{Outcome} \\
     \hline
     Proposal & Report, design, presentation & Proposal defense \\
     \hline
-    Early semester & Setup and core development & Working prototype \\
+    Mid-term & Separations I--II complete; scoring started & Mid-term defense \\
     \hline
-    Mid-term & Progress demo and report & Mid-term defense \\
-    \hline
-    Late semester & Testing and refinement & Stable demo \\
-    \hline
-    Final & Documentation and presentation & Final defense \\
+    Final & Separation III complete; tests and documentation & Final defense \\
     \hline
   \end{tabularx}
-  \captionof{table}{Indicative project schedule (initial proposal)}
+  \captionof{table}{Defense milestones (initial proposal)}
   \label{tab:schedule}
 \end{center}
 \vspace{0.5em}

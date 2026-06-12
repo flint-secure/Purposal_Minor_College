@@ -18,7 +18,7 @@ figures/uml/%.pdf: figures/uml/src/%.puml scripts/build-uml.sh
 
 pdf: uml $(MAIN).pdf
 
-$(MAIN).pdf: $(MAIN).tex $(CLS) sections/*.tex figures/use-case-diagram.tex $(UML_PDF)
+$(MAIN).pdf: $(MAIN).tex $(CLS) sections/*.tex figures/use-case-diagram.tex figures/gantt-chart.tex $(UML_PDF)
 	$(LATEX) $(LATEXFLAGS) $(MAIN).tex
 	$(LATEX) $(LATEXFLAGS) $(MAIN).tex
 	$(LATEX) $(LATEXFLAGS) $(MAIN).tex

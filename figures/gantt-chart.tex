@@ -1,0 +1,81 @@
+% Agile Gantt chart — three separations, two-week sprints (Jun–Nov 2026)
+\begin{tikzpicture}[
+  x=0.38cm,
+  y=0.72cm,
+  font=\tiny,
+  sprint/.style={
+    rectangle,
+    draw,
+    line width=0.4pt,
+    fill=white,
+    minimum height=0.48cm,
+    align=center,
+    font=\fontsize{4.5}{5.5}\selectfont
+  },
+  mile/.style={
+    diamond,
+    draw,
+    line width=0.4pt,
+    fill=black!12,
+    inner sep=0.5pt
+  },
+  sep/.style={
+    rectangle,
+    draw,
+    line width=0.55pt,
+    fill=none,
+    inner sep=6pt
+  },
+  grid/.style={line width=0.2pt, black!25}
+]
+
+% Week grid (16 weeks = 8 two-week sprints)
+\foreach \w in {0,...,16} {
+  \draw[grid] (\w, -0.3) -- (\w, 7.6);
+}
+\foreach \w/\lbl in {0/Jun, 4/Jul, 8/Aug, 12/Sep, 16/Oct} {
+  \node[font=\scriptsize] at (\w, 7.9) {\lbl};
+}
+\node[anchor=west, font=\scriptsize\bfseries] at (-3.6, 7.9) {2026};
+
+% --- Separation I: Foundation & infrastructure ---
+\node[sprint, text width=1.55cm] (s11) at (1, 6.2) {Repo \&\\Docker};
+\node[sprint, text width=1.55cm] (s12) at (3, 6.2) {PostgreSQL,\\Redis, NATS};
+\node[sprint, text width=1.55cm] (s21) at (1, 5.2) {API keys \&\\middleware};
+\node[sprint, text width=1.55cm] (s22) at (3, 5.2) {GeoIP, rate\\limits, CI};
+
+\node[sep, fit=(s11)(s12)(s21)(s22),
+  label={[anchor=east, align=right, text width=2.7cm]left:{\textbf{Separation I}\\Foundation \&\\infrastructure}}] {};
+
+% --- Separation II: Device identification ---
+\node[sprint, text width=1.55cm] (s31) at (5, 4.0) {Web SDK \&\\signals};
+\node[sprint, text width=1.55cm] (s32) at (7, 4.0) {Identify API\\L1--L2};
+\node[sprint, text width=1.55cm] (s41) at (5, 3.0) {Fuzzy match\\L3};
+\node[sprint, text width=1.55cm] (s42) at (7, 3.0) {Device\\workers};
+
+\node[sep, fit=(s31)(s32)(s41)(s42),
+  label={[anchor=east, align=right, text width=2.7cm]left:{\textbf{Separation II}\\Device\\identification}}] {};
+
+% --- Separation III: Scoring, workers & delivery ---
+\node[sprint, text width=1.55cm] (s51) at (9, 2.0) {Scoring\\engine};
+\node[sprint, text width=1.55cm] (s52) at (11, 2.0) {Velocity \&\\NATS events};
+\node[sprint, text width=1.55cm] (s61) at (9, 1.0) {Go workers\\profiles};
+\node[sprint, text width=1.55cm] (s62) at (11, 1.0) {Deploy \&\\health checks};
+\node[sprint, text width=3.2cm] (s78) at (10, 0.0) {k6 tests, automated suite, defense prep};
+
+\node[sep, fit=(s51)(s52)(s61)(s62)(s78),
+  label={[anchor=east, align=right, text width=2.7cm]left:{\textbf{Separation III}\\Scoring, workers\\\& delivery}}] {};
+
+% Milestones
+\node[mile] (m0) at (0.5, 7.2) {};
+\node[anchor=south, font=\fontsize{4}{5}\selectfont] at (m0.north) {Proposal};
+\node[mile] (m1) at (9.5, 7.2) {};
+\node[anchor=south, font=\fontsize{4}{5}\selectfont] at (m1.north) {Mid-term};
+\node[mile] (m1b) at (15.5, 7.2) {};
+\node[anchor=south, font=\fontsize{4}{5}\selectfont] at (m1b.north) {Final};
+
+% Legend
+\node[anchor=west, font=\fontsize{4.5}{5.5}\selectfont] at (0, -0.8) {%
+  \textbf{Agile:} two-week sprints; supervisor check-in each sprint; working demo at each milestone.};
+
+\end{tikzpicture}
